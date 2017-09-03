@@ -7,25 +7,30 @@ open canopy
 let run () =
   start chrome
 
+  context "Register"
+
+  once (fun _ -> url "http://localhost:8083/register"; click "Submit")
+
+  "New registration validation" &&& fun _ ->
+    displayed "First Name is required"
+    displayed "Last Name is required"
+    displayed "Email is not a valid email"
+    displayed "Email is required"
+    displayed "Password must be between 6 and 100 characters"
+    displayed "Password is required"
+    displayed "Confirm Password must be between 6 and 100 characters"
+    displayed "Confirm Password is required"
+
   context "Product"
 
   once (fun _ -> url "http://localhost:8083/product/create"; click ".btn")
 
-  "Name is required" &&& fun _ ->
+  "New product validation" &&& fun _ ->
     displayed "Name is required"
-
-  "Description is required" &&& fun _ ->
     displayed "Description is required"
-
-  "Price is required" &&& fun _ ->
     displayed "Price is required"
-
-  "Price must be a valid double" &&& fun _ ->
     displayed "Price is not a valid number (decimal)"
-
-  "Category is required" &&& fun _ ->
     displayed "Category is required"
-
 
   context "Cart"
 
@@ -52,8 +57,6 @@ let run () =
 
   "Cart FK must be a valid integer" &&& fun _ ->
     displayed "Cart FK is not a valid number (int)"
-
-
 
   canopy.runner.run()
 
