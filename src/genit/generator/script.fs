@@ -5,11 +5,11 @@ open generator
 
 let someSite () =
 
-  db SQLServer
+  db Postgres
 
   dbPassword "NOTSecure1234"
 
-  site "Bob's Burgers"
+  site "Best Online Store"
 
   basic home
 
@@ -17,48 +17,33 @@ let someSite () =
 
   basic login
 
-  page "Order" CVELS
+  page "Product" CVELS
     [
       text      "Name"          Required
-      text      "Food"          Null
-      text      "Drinks"        Null
-      dollar    "Tip"           Null
-      paragraph "Notes"         Null
-      date      "Delivery Date" Required
-      phone     "Phone Number"  Required
-      text      "Address"       Null
-      text      "City"          Null
-      text      "State"         Null
-      text      "Zip"           Null
-      boolean   "Free Delivery"
-      dropdown  "Free Soda"     Required
-        [
-          "Cola"
-          "Orange"
-          "Root Beer"
-        ]
+      text      "Description"   Required
+      dollar    "Price"         Required
+      text      "Category"      Required
     ]
 
-  page "Order Item" CVEL
+  page "Cart" CVEL
     [
-      text      "Name"          Required
-      fk        "Order"
+      fk        "Register"
     ]
 
-  api "Order"
-
-  dashboard "Order"
+  page "CartItem" CVEL
     [
-      line "Delivery Date"
-      bar  "State"
-      pie  "Tip"
+      fk        "Cart"
+      fk        "Product"
     ]
 
-  advancedPage "Reserveration" CVELS RequiresLogin
+  advancedPage "Checkout" CVEL RequiresLogin
     [
-      text  "Name"         Required
-      date  "Date"         Required
-      phone "Phone Number" Required
+      fk        "Cart"
     ]
+
+  api "User"
+  api "Product"
+  api "Cart"
+  api "Checkout"
 
   currentSite

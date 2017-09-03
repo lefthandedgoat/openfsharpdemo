@@ -54,11 +54,11 @@ let setAuthCookieAndRedirect id redirectTo =
 
 let viewGET id (bundle : Bundle<_,_>) =
   if bundle.tryById.IsNone || bundle.view_view.IsNone then
-    OK error_404
+    Suave.RequestErrors.NOT_FOUND error_404
   else
     let data = bundle.tryById.Value id
     match data with
-    | None -> OK error_404
+    | None -> Suave.RequestErrors.NOT_FOUND error_404
     | Some(data) -> OK <| bundle.view_view.Value data
 
 let editGET id (bundle : Bundle<_,_>) =
