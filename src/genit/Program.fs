@@ -39,7 +39,7 @@ if generate then
   //generator.generate <| script.someSite()
 else if test then
   generated_unittests.run()
-  generated_uitests.run()
+  //generated_uitests.run()
 else
   let config = { defaultConfig with serverKey = generated_security.serverKey }
   startWebServer config routes

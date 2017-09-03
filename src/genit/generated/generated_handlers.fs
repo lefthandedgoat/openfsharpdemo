@@ -21,6 +21,10 @@ open helper_handler
 open Nessos.FsPickler
 open Nessos.FsPickler.Json
 open forms
+open Newtonsoft.Json
+
+let hasHeader header (req : HttpRequest) = req.headers |> List.exists (fun header' -> header = header')
+let fromJson<'a> json = JsonConvert.DeserializeObject(json, typeof<'a>) :?> 'a
 
 
 let home = GET >=> OK view_jumbo_home
@@ -29,14 +33,24 @@ let register =
   choose
     [
       GET >=> OK view_register
-      POST >=> bindToForm registerForm (fun registerForm ->
-        let validation = validation_registerForm registerForm
-        if validation = [] then
-          let converted = convert_registerForm registerForm
-          let id = insert_register converted
-          setAuthCookieAndRedirect id "/"
-        else
-          OK (view_errored_register validation registerForm))
+      POST >=> request (fun req ->
+        match hasHeader ("content-type", "application/json") req with
+        | true ->
+            let register = fromJson<Register> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+            let validation = validation_registerJson register
+            if validation = [] then
+              OK "GOOD"
+            else
+              OK "FAIL"
+        | false ->
+          bindToForm registerForm (fun registerForm ->
+            let validation = validation_registerForm registerForm
+            if validation = [] then
+              let converted = convert_registerForm registerForm
+              let id = insert_register converted
+              setAuthCookieAndRedirect id "/"
+            else
+              OK (view_errored_register validation registerForm)))
     ]
 
 let login =
@@ -50,7 +64,7 @@ let login =
           let converted = convert_loginForm loginForm
           let loginAttempt = authenticate converted
           match loginAttempt with
-            | Some(loginAttempt) ->
+            | Some(_) ->
               let returnPath = getQueryStringValue req "returnPath"
               let returnPath = if returnPath = "" then "/" else returnPath
               setAuthCookieAndRedirect id returnPath

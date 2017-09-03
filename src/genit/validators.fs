@@ -32,7 +32,7 @@ let validate_phone property (value : string) =
 
 let private passwordPattern = @"(\w){6,100}"
 let validate_password property value =
-  if not <| Regex(passwordPattern).IsMatch(value)
+  if value = null || not <| Regex(passwordPattern).IsMatch(value)
   then Some (property, sprintf "%s must be between 6 and 100 characters" property)
   else None
 

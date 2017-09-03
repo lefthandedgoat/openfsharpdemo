@@ -24,7 +24,7 @@ let convert_registerForm (registerForm : RegisterForm) : Register =
     Email = registerForm.Email
     Password = registerForm.Password
   }
-  
+
 type LoginForm =
   {
     UserID : string
@@ -40,7 +40,7 @@ let convert_loginForm (loginForm : LoginForm) : Login =
     Email = loginForm.Email
     Password = loginForm.Password
   }
-  
+
 type ProductForm =
   {
     ProductID : string
@@ -60,7 +60,7 @@ let convert_productForm (productForm : ProductForm) : Product =
     Price = double productForm.Price
     Category = productForm.Category
   }
-  
+
 type CartForm =
   {
     CartID : string
@@ -74,7 +74,7 @@ let convert_cartForm (cartForm : CartForm) : Cart =
     CartID = int64 cartForm.CartID
     RegisterFK = int64 cartForm.RegisterFK
   }
-  
+
 type CartItemForm =
   {
     CartItemID : string
@@ -90,7 +90,7 @@ let convert_cartItemForm (cartItemForm : CartItemForm) : CartItem =
     CartFK = int64 cartItemForm.CartFK
     ProductFK = int64 cartItemForm.ProductFK
   }
-  
+
 type CheckoutForm =
   {
     CheckoutID : string
@@ -104,4 +104,3 @@ let convert_checkoutForm (checkoutForm : CheckoutForm) : Checkout =
     CheckoutID = int64 checkoutForm.CheckoutID
     CartFK = int64 checkoutForm.CartFK
   }
-  
