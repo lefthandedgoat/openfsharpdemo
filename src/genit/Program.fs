@@ -35,7 +35,8 @@ let generate = args |> Array.exists (fun arg -> arg = "generate")
 let test = args |> Array.exists (fun arg -> arg = "test")
 
 if generate then
-  generator.generate <| script.someSite()
+  ()
+  //generator.generate <| script.someSite()
 else if test then
   generated_unittests.run()
   generated_uitests.run()

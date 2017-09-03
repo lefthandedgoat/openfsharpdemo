@@ -123,7 +123,6 @@ Target "Build" (fun _ ->
     |> ignore
 )
 
-
 // --------------------------------------------------------------------------------------
 // Run stuff
 let execProcess arg =
@@ -135,6 +134,13 @@ let execProcess arg =
   |> ignore
 
 Target "RunSite" (fun _ -> execProcess "")
+
+Target "RunSiteAsync" (fun _ ->
+  fireAndForget
+    (fun info ->
+     info.FileName <- (exe @@ "genit.exe")
+     info.Arguments <- ""
+    ))
 
 Target "Generate" (fun _ -> execProcess "generate")
 
@@ -205,6 +211,8 @@ Target "All" DoNothing
   ==> "CreateDB"
 
 "Bin"
+  ==> "CopyAssets"
+  ==> "RunSiteAsync"
   ==> "Test"
 
 "Bin"
