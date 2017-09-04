@@ -8,8 +8,7 @@ open generated_types
 open Newtonsoft.Json
 
 let run () =
-  context "Register"
-
+  ////////baddies
   let badRegistration =
     {
       Register.UserID = 0L
@@ -19,6 +18,16 @@ let run () =
       Password = ""
     }
 
+  let badProduct =
+    {
+      Product.ProductID = 0L
+      Name = ""
+      Description = ""
+      Price = 0.0
+      Category = ""
+    }
+
+  ///////valid
   let validRegistration =
     {
       Register.UserID = 0L
@@ -26,6 +35,15 @@ let run () =
       LastName = "Holt"
       Email = "fake@fakeemail.com"
       Password = "123456"
+    }
+
+  let validProduct =
+    {
+      Product.ProductID = 0L
+      Name = "Best Soda"
+      Description = "its great"
+      Price = 1.0
+      Category = "food"
     }
 
   let status (response : Response) expected =
@@ -56,6 +74,10 @@ let run () =
     let left = JsonConvert.DeserializeObject<Result<'a>>(body)
     if left.Data = right then failwith (sprintf "Expected NOT: %A, Got: %A" right left.Data)
 
+  ///////////////////////
+
+  context "Register"
+
   "registration validation works" &&& fun _ ->
     let asJson = JsonConvert.SerializeObject(badRegistration)
 
@@ -74,6 +96,37 @@ let run () =
 
     let response =
       "http://localhost:8083/api/register"
+      |> createRequest Post
+      |> withHeader (ContentType "application/json")
+      |> withBody asJson
+      |> getResponse
+
+    errors response []
+    status response 200
+    response != 0L
+
+  ///////////////////////////
+
+  context "Product"
+
+  "product validation works" &&& fun _ ->
+    let asJson = JsonConvert.SerializeObject(badProduct)
+
+    let response =
+      "http://localhost:8083/api/product/create"
+      |> createRequest Post
+      |> withHeader (ContentType "application/json")
+      |> withBody asJson
+      |> getResponse
+
+    errors response ["Category is required"; "Description is required"; "Name is required"; "Price is required"]
+    status response 400
+
+  "good product works" &&& fun _ ->
+    let asJson = JsonConvert.SerializeObject(validProduct)
+
+    let response =
+      "http://localhost:8083/api/product/create"
       |> createRequest Post
       |> withHeader (ContentType "application/json")
       |> withBody asJson

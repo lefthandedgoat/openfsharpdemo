@@ -86,6 +86,20 @@ let create_product =
       POST >=> bindToForm productForm (fun form -> createPOST form bundle_product)
     ]
 
+let api_create_product =
+  choose
+    [
+      POST >=> request (fun req ->
+        let product = fromJson<Product> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+        let validation = validation_productJson product
+        if validation = [] then
+          let id = insert_product product
+          OK ({ Data = id; Errors = [] } |> toJson)
+        else
+          let result = { Data = 0; Errors = mapErrors validation } |> toJson
+          BAD_REQUEST result)
+    ]
+
 let generate_product count =
   choose
     [

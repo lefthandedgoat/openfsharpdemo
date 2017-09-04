@@ -4,8 +4,8 @@ open System
 open System.Net.Mail
 open System.Text.RegularExpressions
 
-let validate_required property value =
-  if String.IsNullOrWhiteSpace value
+let validate_required property (value : 'a) =
+  if value = Unchecked.defaultof<'a> || String.IsNullOrWhiteSpace (value.ToString())
   then Some (property, sprintf "%s is required" property)
   else None
 
@@ -43,7 +43,7 @@ let validate_integer property value =
   else None
 
 let validate_double property value =
-  let parsed, _ = System.Double.TryParse(value)
+  let parsed, _ = System.Double.TryParse(value.ToString())
   if not parsed
   then Some (property, sprintf "%s is not a valid number (decimal)" property)
   else None

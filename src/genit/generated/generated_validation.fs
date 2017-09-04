@@ -44,6 +44,15 @@ let validation_productForm (productForm : ProductForm) =
     validate_required "Category" productForm.Category
   ] |> List.choose id
 
+let validation_productJson (product : Product) =
+  [
+    validate_required "Name" product.Name
+    validate_required "Description" product.Description
+    validate_double "Price" product.Price
+    validate_required "Price" product.Price
+    validate_required "Category" product.Category
+  ] |> List.choose id
+
 let validation_cartForm (cartForm : CartForm) =
   [
     validate_integer "Register FK" cartForm.RegisterFK

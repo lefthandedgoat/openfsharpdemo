@@ -18,6 +18,7 @@ let path_register = "/register"
 let path_api_register = "/api/register"
 let path_login = "/login"
 let path_create_product = "/product/create"
+let path_api_create_product = "/api/product/create"
 let path_generate_product : Int64Path = "/product/generate/%i"
 let path_view_product : Int64Path = "/product/view/%i"
 let path_edit_product : Int64Path = "/product/edit/%i"
@@ -50,6 +51,7 @@ let generated_routes =
     path path_api_register >=> api_register
     path path_login >=> login
     path path_create_product >=> create_product
+    path path_api_create_product >=> api_create_product
     pathScan path_generate_product generate_product
     pathScan path_view_product view_product
     pathScan path_edit_product edit_product
