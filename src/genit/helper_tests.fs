@@ -59,13 +59,27 @@ let get uri =
   |> withHeader (ContentType "application/json")
   |> getResponse
 
+let put data uri =
+  sprintf "http://localhost:8083%s" uri
+  |> createRequest Put
+  |> withHeader (ContentType "application/json")
+  |> withBody (JsonConvert.SerializeObject(data))
+  |> getResponse
+
 let addProduct product =
   "/api/product/create"
   |> post product
   |> errors []
   |> notEq 0L
   |> status' 200
-  |> extract<int>
+  |> extract<int64>
+
+let getProduct (id : int64) =
+  sprintf "/api/product/%i" id
+  |> get
+  |> errors []
+  |> status' 200
+  |> extract<Product>
 
 let registerUser register =
   "/api/register"
@@ -73,4 +87,4 @@ let registerUser register =
   |> errors []
   |> notEq 0L
   |> status' 200
-  |> extract<int>
+  |> extract<int64>

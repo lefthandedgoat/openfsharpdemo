@@ -53,4 +53,32 @@ let run () =
       |> status' 200
       |> extract<Product>
 
-    product == { fakeProduct with ProductID = int64 id }
+    product == { fakeProduct with ProductID = id }
+
+  "editing product validation works" &&& fun _ ->
+    let id = addProduct (fake_product ())
+    let edited = { badProduct with ProductID = id }
+
+    "/api/product/edit"
+    |> put edited
+    |> errors ["Category is required"; "Description is required"; "Name is required"; "Price is required"]
+    |> status 400
+
+  "editing invalid product gives 404" &&& fun _ ->
+    let edited = { badProduct with ProductID = -1L }
+
+    "/api/product/edit"
+    |> put edited
+    |> status 404
+
+  "editing valid product works" &&& fun _ ->
+    let fakeProduct = fake_product ()
+    let id = addProduct fakeProduct
+    let product = getProduct id
+    let edited = { product with Price = product.Price * 2.0 }
+
+    "/api/product/edit"
+    |> put edited
+    |> status 204
+
+    getProduct id == edited

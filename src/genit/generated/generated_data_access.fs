@@ -44,7 +44,7 @@ INSERT INTO best_online_store.users
   let bCryptScheme = getBCryptScheme currentBCryptScheme
   let salt = BCrypt.GenerateSalt(bCryptScheme.WorkFactor)
   let password = BCrypt.HashPassword(register.Password, salt)
-    
+
   use connection = connection connectionString
   use command = command connection sql
   command
@@ -54,7 +54,7 @@ INSERT INTO best_online_store.users
   |> param "password" password
   |> executeScalar
   |> string |> int64
-  
+
 let toLogin (reader : IDataReader) : Login list =
   [ while reader.Read() do
     yield {
@@ -63,7 +63,7 @@ let toLogin (reader : IDataReader) : Login list =
       Password = getString "password" reader
     }
   ]
-  
+
 
 let authenticate (login : Login) =
   let sql = "
@@ -84,7 +84,7 @@ WHERE email = :email
       if verified
       then Some(user)
       else None
-  
+
 let toProduct (reader : IDataReader) : Product list =
   [ while reader.Read() do
     yield {
@@ -95,7 +95,7 @@ let toProduct (reader : IDataReader) : Product list =
       Category = getString "category" reader
     }
   ]
-  
+
 
 let insert_product (product : Product) =
   let sql = "
@@ -124,7 +124,7 @@ INSERT INTO best_online_store.products
   |> param "category" product.Category
   |> executeScalar
   |> string |> int64
-  
+
 
 let update_product (product : Product) =
   let sql = "
@@ -146,7 +146,7 @@ WHERE product_id = :product_id;
   |> param "price" product.Price
   |> param "category" product.Category
   |> executeNonQuery
-  
+
 
 let tryById_product id =
   let sql = "
@@ -169,7 +169,7 @@ LIMIT 500
   use command = command connection sql
   command
   |> read toProduct
-  
+
 
 let getManyWhere_product field how value =
   let field = to_postgres_dbColumn field
@@ -184,7 +184,7 @@ LIMIT 500" field
   command
   |> param "search" search
   |> read toProduct
-  
+
 let toCart (reader : IDataReader) : Cart list =
   [ while reader.Read() do
     yield {
@@ -192,7 +192,7 @@ let toCart (reader : IDataReader) : Cart list =
       RegisterFK = getInt64 "register_fk" reader
     }
   ]
-  
+
 
 let insert_cart (cart : Cart) =
   let sql = "
@@ -212,7 +212,7 @@ INSERT INTO best_online_store.carts
   |> param "register_fk" cart.RegisterFK
   |> executeScalar
   |> string |> int64
-  
+
 
 let update_cart (cart : Cart) =
   let sql = "
@@ -228,7 +228,7 @@ WHERE cart_id = :cart_id;
   |> param "cart_id" cart.CartID
   |> param "register_fk" cart.RegisterFK
   |> executeNonQuery
-  
+
 
 let tryById_cart id =
   let sql = "
@@ -251,7 +251,7 @@ LIMIT 500
   use command = command connection sql
   command
   |> read toCart
-  
+
 let toCartItem (reader : IDataReader) : CartItem list =
   [ while reader.Read() do
     yield {
@@ -260,7 +260,7 @@ let toCartItem (reader : IDataReader) : CartItem list =
       ProductFK = getInt64 "product_fk" reader
     }
   ]
-  
+
 
 let insert_cartItem (cartItem : CartItem) =
   let sql = "
@@ -283,7 +283,7 @@ INSERT INTO best_online_store.cartitems
   |> param "product_fk" cartItem.ProductFK
   |> executeScalar
   |> string |> int64
-  
+
 
 let update_cartItem (cartItem : CartItem) =
   let sql = "
@@ -301,7 +301,7 @@ WHERE cartitem_id = :cartitem_id;
   |> param "cart_fk" cartItem.CartFK
   |> param "product_fk" cartItem.ProductFK
   |> executeNonQuery
-  
+
 
 let tryById_cartItem id =
   let sql = "
@@ -324,7 +324,7 @@ LIMIT 500
   use command = command connection sql
   command
   |> read toCartItem
-  
+
 let toCheckout (reader : IDataReader) : Checkout list =
   [ while reader.Read() do
     yield {
@@ -332,7 +332,7 @@ let toCheckout (reader : IDataReader) : Checkout list =
       CartFK = getInt64 "cart_fk" reader
     }
   ]
-  
+
 
 let insert_checkout (checkout : Checkout) =
   let sql = "
@@ -352,7 +352,7 @@ INSERT INTO best_online_store.checkouts
   |> param "cart_fk" checkout.CartFK
   |> executeScalar
   |> string |> int64
-  
+
 
 let update_checkout (checkout : Checkout) =
   let sql = "
@@ -368,7 +368,7 @@ WHERE checkout_id = :checkout_id;
   |> param "checkout_id" checkout.CheckoutID
   |> param "cart_fk" checkout.CartFK
   |> executeNonQuery
-  
+
 
 let tryById_checkout id =
   let sql = "
@@ -391,4 +391,3 @@ LIMIT 500
   use command = command connection sql
   command
   |> read toCheckout
-  

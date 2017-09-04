@@ -215,6 +215,24 @@ let api_create_product =
           BAD_REQUEST result)
     ]
 
+let api_edit_product =
+  choose
+    [
+      PUT >=> request (fun req ->
+        let product = fromJson<Product> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+        let data = tryById_product product.ProductID
+        match data with
+        | None -> NOT_FOUND error_404
+        | Some(_) ->
+          let validation = validation_productJson product
+          if validation = [] then
+            update_product product
+            NO_CONTENT
+          else
+            let result = { Data = 0; Errors = mapErrors validation } |> toJson
+            BAD_REQUEST result)
+    ]
+
 let api_cart id =
   GET >=>
     let data = tryById_cart id

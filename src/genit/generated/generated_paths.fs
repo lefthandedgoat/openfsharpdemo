@@ -42,6 +42,7 @@ let path_api_register = "/api/register"
 let path_api_user : Int64Path = "/api/user/%i"
 let path_api_product : Int64Path = "/api/product/%i"
 let path_api_create_product = "/api/product/create"
+let path_api_edit_product = "/api/product/edit"
 let path_api_cart : Int64Path = "/api/cart/%i"
 let path_api_checkout : Int64Path = "/api/checkout/%i"
 
@@ -74,6 +75,7 @@ let generated_routes =
     pathScan path_edit_checkout (fun id -> loggedOn path_login (edit_checkout id))
     path path_list_checkout >=> loggedOn path_login list_checkout
     pathScan path_api_product api_product
+    path path_api_edit_product >=> api_edit_product
     pathScan path_api_cart api_cart
     pathScan path_api_checkout api_checkout
   ]
