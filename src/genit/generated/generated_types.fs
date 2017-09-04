@@ -1,5 +1,11 @@
 module generated_types
 
+type Result<'T> =
+  {
+    Data : 'T
+    Errors : string list
+  }
+
 type Register =
   {
     UserID : int64

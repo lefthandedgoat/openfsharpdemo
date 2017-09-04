@@ -36,7 +36,7 @@ let bundle_product : Bundle<Product, ProductForm> =
       href_view = "/product/view/%i"
       href_edit = "/product/edit/%i"
     }
-    
+
 let bundle_cart : Bundle<Cart, CartForm> =
     {
       validateForm = Some validation_cartForm
@@ -64,7 +64,7 @@ let bundle_cart : Bundle<Cart, CartForm> =
       href_view = "/cart/view/%i"
       href_edit = "/cart/edit/%i"
     }
-    
+
 let bundle_cartItem : Bundle<CartItem, CartItemForm> =
     {
       validateForm = Some validation_cartItemForm
@@ -92,7 +92,7 @@ let bundle_cartItem : Bundle<CartItem, CartItemForm> =
       href_view = "/cartItem/view/%i"
       href_edit = "/cartItem/edit/%i"
     }
-    
+
 let bundle_checkout : Bundle<Checkout, CheckoutForm> =
     {
       validateForm = Some validation_checkoutForm
@@ -120,5 +120,3 @@ let bundle_checkout : Bundle<Checkout, CheckoutForm> =
       href_view = "/checkout/view/%i"
       href_edit = "/checkout/edit/%i"
     }
-    
-  

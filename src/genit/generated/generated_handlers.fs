@@ -22,10 +22,12 @@ open Nessos.FsPickler
 open Nessos.FsPickler.Json
 open forms
 open Newtonsoft.Json
+open Suave.RequestErrors
 
 let hasHeader header (req : HttpRequest) = req.headers |> List.exists (fun header' -> header = header')
 let fromJson<'a> json = JsonConvert.DeserializeObject(json, typeof<'a>) :?> 'a
-
+let toJson obj = JsonConvert.SerializeObject(obj)
+let mapErrors validation = validation |> List.map (fun (_,error) -> error)
 
 let home = GET >=> OK view_jumbo_home
 
@@ -41,7 +43,8 @@ let register =
             if validation = [] then
               OK "GOOD"
             else
-              OK "FAIL"
+              let result = { Data = 0; Errors = mapErrors validation } |> toJson
+              BAD_REQUEST result
         | false ->
           bindToForm registerForm (fun registerForm ->
             let validation = validation_registerForm registerForm
