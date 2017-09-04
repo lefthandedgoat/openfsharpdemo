@@ -179,18 +179,15 @@ let list_checkout =
   GET >=> warbler (fun _ -> getMany_checkout () |> view_list_checkout |> OK)
 
 let api_register =
-  choose
-    [
-      POST >=> request (fun req ->
-        let register = fromJson<Register> (System.Text.Encoding.UTF8.GetString(req.rawForm))
-        let validation = validation_registerJson register
-        if validation = [] then
-          let id = insert_register register
-          OK ({ Data = id; Errors = [] } |> toJson)
-        else
-          let result = { Data = 0; Errors = mapErrors validation } |> toJson
-          BAD_REQUEST result)
-    ]
+  POST >=> request (fun req ->
+    let register = fromJson<Register> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+    let validation = validation_registerJson register
+    if validation = [] then
+      let id = insert_register register
+      OK ({ Data = id; Errors = [] } |> toJson)
+    else
+      let result = { Data = 0; Errors = mapErrors validation } |> toJson
+      BAD_REQUEST result)
 
 let api_product id =
   GET >=>
@@ -202,36 +199,39 @@ let api_product id =
        >=> OK (toJson { Data = data; Errors = [] })
 
 let api_create_product =
-  choose
-    [
-      POST >=> request (fun req ->
-        let product = fromJson<Product> (System.Text.Encoding.UTF8.GetString(req.rawForm))
-        let validation = validation_productJson product
-        if validation = [] then
-          let id = insert_product product
-          OK (toJson { Data = id; Errors = [] })
-        else
-          let result = { Data = 0; Errors = mapErrors validation } |> toJson
-          BAD_REQUEST result)
-    ]
+  POST >=> request (fun req ->
+    let product = fromJson<Product> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+    let validation = validation_productJson product
+    if validation = [] then
+      let id = insert_product product
+      OK (toJson { Data = id; Errors = [] })
+    else
+      let result = { Data = 0; Errors = mapErrors validation } |> toJson
+      BAD_REQUEST result)
 
 let api_edit_product =
-  choose
-    [
-      PUT >=> request (fun req ->
-        let product = fromJson<Product> (System.Text.Encoding.UTF8.GetString(req.rawForm))
-        let data = tryById_product product.ProductID
-        match data with
-        | None -> NOT_FOUND error_404
-        | Some(_) ->
-          let validation = validation_productJson product
-          if validation = [] then
-            update_product product
-            NO_CONTENT
-          else
-            let result = { Data = 0; Errors = mapErrors validation } |> toJson
-            BAD_REQUEST result)
-    ]
+  PUT >=> request (fun req ->
+    let product = fromJson<Product> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+    let data = tryById_product product.ProductID
+    match data with
+    | None -> NOT_FOUND error_404
+    | Some(_) ->
+      let validation = validation_productJson product
+      if validation = [] then
+        update_product product
+        NO_CONTENT
+      else
+        let result = { Data = 0; Errors = mapErrors validation } |> toJson
+        BAD_REQUEST result)
+
+let api_delete_product id =
+  DELETE >=>
+    let data = tryById_product id
+    match data with
+    | None -> NOT_FOUND error_404
+    | Some(_) ->
+        delete_product id
+        NO_CONTENT
 
 let api_cart id =
   GET >=>

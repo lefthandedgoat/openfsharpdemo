@@ -147,6 +147,16 @@ WHERE product_id = :product_id;
   |> param "category" product.Category
   |> executeNonQuery
 
+let delete_product id =
+  let sql = "
+DELETE FROM best_online_store.products
+WHERE product_id = :product_id;
+"
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "product_id" id
+  |> executeNonQuery
 
 let tryById_product id =
   let sql = "

@@ -35,14 +35,14 @@ let run () =
     |> errors ["Category is required"; "Description is required"; "Name is required"; "Price is required"]
     |> status 400
 
-  "good product works" &&& fun _ ->
+  "good product works" &&& fun _ -> // *
     "/api/product/create"
     |> post validProduct
     |> errors []
     |> notEq 0L
     |> status 200
 
-  "getting product works" &&& fun _ ->
+  "getting product works" &&& fun _ -> // *
     let fakeProduct = fake_product ()
     let id = addProduct fakeProduct
 
@@ -71,7 +71,7 @@ let run () =
     |> put edited
     |> status 404
 
-  "editing valid product works" &&& fun _ ->
+  "editing valid product works" &&& fun _ -> // *
     let fakeProduct = fake_product ()
     let id = addProduct fakeProduct
     let product = getProduct id
@@ -82,3 +82,43 @@ let run () =
     |> status 204
 
     getProduct id == edited
+
+  "deleting invalid product gives 404" &&& fun _ ->
+    "/api/product/delete/0"
+    |> delete
+    |> status 404
+
+  "deleting product works" &&& fun _ -> // *
+    let fakeProduct = fake_product ()
+    let id = addProduct fakeProduct
+
+    sprintf "/api/product/delete/%i" id
+    |> delete
+    |> status 204
+
+    sprintf "/api/product/%i" id
+    |> get
+    |> status 404
+
+  "Product: POST/PUT/GET/DELETE" &&& fun _ ->
+    let fakeProduct = fake_product ()
+
+    //POST
+    let id = addProduct fakeProduct
+
+    //GET and validate
+    let product = getProduct id
+    product == { fakeProduct with ProductID = id }
+
+    //PUT
+    editProduct { product with Price = product.Price * 2.0 }
+
+    //GET and validate
+    getProduct id == { product with Price = product.Price * 2.0 }
+
+    //DELETE and validate
+    deleteProduct id
+
+    sprintf "/api/product/%i" id
+    |> get
+    |> status 404

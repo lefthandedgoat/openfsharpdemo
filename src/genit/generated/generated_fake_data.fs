@@ -21,7 +21,7 @@ let fake_product () =
     ProductID = -1L
     Name = (randomItem firstNames) + " " + (randomItem lastNames)
     Description = randomItems 6 words
-    Price = random.Next(10) |> double
+    Price = random.Next(1, 10) |> double
     Category = randomItems 6 words
   }
 

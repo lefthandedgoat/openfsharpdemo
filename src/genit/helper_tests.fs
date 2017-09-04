@@ -66,6 +66,11 @@ let put data uri =
   |> withBody (JsonConvert.SerializeObject(data))
   |> getResponse
 
+let delete uri =
+  sprintf "http://localhost:8083%s" uri
+  |> createRequest Delete
+  |> getResponse
+
 let addProduct product =
   "/api/product/create"
   |> post product
@@ -74,12 +79,22 @@ let addProduct product =
   |> status' 200
   |> extract<int64>
 
+let editProduct product =
+  "/api/product/edit"
+  |> put product
+  |> status 204
+
 let getProduct (id : int64) =
   sprintf "/api/product/%i" id
   |> get
   |> errors []
   |> status' 200
   |> extract<Product>
+
+let deleteProduct (id : int64) =
+  sprintf "/api/product/delete/%i" id
+  |> delete
+  |> status 204
 
 let registerUser register =
   "/api/register"
