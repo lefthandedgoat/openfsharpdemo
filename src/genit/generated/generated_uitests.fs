@@ -57,7 +57,3 @@ let run () =
 
   "Cart FK must be a valid integer" &&& fun _ ->
     displayed "Cart FK is not a valid number (int)"
-
-  canopy.runner.run()
-
-  quit()

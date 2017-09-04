@@ -40,6 +40,9 @@ if generate then
 else if test then
   generated_unittests.run()
   //generated_uitests.run()
+
+  canopy.runner.run()
+  canopy.core.quit()
 else
   let config = { defaultConfig with serverKey = generated_security.serverKey }
   startWebServer config routes

@@ -89,6 +89,8 @@
     <Compile Include="generated/generated_bundles.fs" />
     <Compile Include="generated/generated_handlers.fs" />
     <Compile Include="generated/generated_paths.fs" />
+    <Compile Include="test_data.fs" />
+    <Compile Include="helper_tests.fs" />
     <Compile Include="generated/generated_unittests.fs" />
     <Compile Include="generated/generated_uitests.fs" />
     <Compile Include="Program.fs" />
