@@ -41,7 +41,8 @@ let register =
             let register = fromJson<Register> (System.Text.Encoding.UTF8.GetString(req.rawForm))
             let validation = validation_registerJson register
             if validation = [] then
-              OK "GOOD"
+              let id = insert_register register
+              OK ({ Data = id; Errors = [] } |> toJson)
             else
               let result = { Data = 0; Errors = mapErrors validation } |> toJson
               BAD_REQUEST result

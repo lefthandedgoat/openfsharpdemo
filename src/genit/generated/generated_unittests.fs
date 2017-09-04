@@ -5,14 +5,11 @@ open generated_validation
 open canopy
 open HttpClient
 open generated_types
-open Nessos.FsPickler
-open Nessos.FsPickler.Json
 open Newtonsoft.Json
 
 let run () =
   context "Register"
 
-  let serializer = FsPickler.CreateJsonSerializer(indent = true)
   let badRegistration =
     {
       Register.UserID = 0L
@@ -20,6 +17,15 @@ let run () =
       LastName = ""
       Email = ""
       Password = ""
+    }
+
+  let validRegistration =
+    {
+      Register.UserID = 0L
+      FirstName = "Chris"
+      LastName = "Holt"
+      Email = "fake@fakeemail.com"
+      Password = "123456"
     }
 
   let status (response : Response) expected =
@@ -40,8 +46,22 @@ let run () =
     else if missing <> Set.empty then
       failwith (sprintf "Missing Errors: %A" missing)
 
+  let extract (response : Response) =
+    let body = match response.EntityBody with | Some body -> body | _ -> ""
+    JsonConvert.DeserializeObject<Result<_>>(body)
+
+  let ( == ) response (right : 'a) =
+    let body = match response.EntityBody with | Some body -> body | _ -> ""
+    let left = JsonConvert.DeserializeObject<Result<'a>>(body)
+    if left.Data <> right then failwith (sprintf "Expected: %A, Got: %A" right left.Data)
+
+  let ( != ) response (right : 'a) =
+    let body = match response.EntityBody with | Some body -> body | _ -> ""
+    let left = JsonConvert.DeserializeObject<Result<'a>>(body)
+    if left.Data = right then failwith (sprintf "Expected NOT: %A, Got: %A" right left.Data)
+
   "registration validation works" &&& fun _ ->
-    let asJson = serializer.PickleToString(badRegistration)
+    let asJson = JsonConvert.SerializeObject(badRegistration)
 
     let response =
       "http://localhost:8083/register"
@@ -50,7 +70,21 @@ let run () =
       |> withBody asJson
       |> getResponse
 
-    status response 400
     errors response ["Email is not a valid email"; "Email is required"; "First Name is required"; "Last Name is required"; "Password is required"; "Password must be between 6 and 100 characters"]
+    status response 400
+
+  "good registration works" &&& fun _ ->
+    let asJson = JsonConvert.SerializeObject(validRegistration)
+
+    let response =
+      "http://localhost:8083/register"
+      |> createRequest Post
+      |> withHeader (ContentType "application/json")
+      |> withBody asJson
+      |> getResponse
+
+    errors response []
+    status response 200
+    response != 0L
 
   canopy.runner.run()
