@@ -202,7 +202,7 @@ let api_search_product =
   GET >=> request (fun req ->
       match req.queryParam "term" with
       | Choice1Of2 term -> OK (toJson { Data = generated_data_access.search_product term; Errors = [] })
-      | Choice2Of2 _ -> OK (toJson { Data = []; Errors = ["No search term provided"] }))
+      | Choice2Of2 _ -> BAD_REQUEST (toJson { Data = []; Errors = ["No search term provided"] }))
 
 let api_create_product =
   POST >=> request (fun req ->
