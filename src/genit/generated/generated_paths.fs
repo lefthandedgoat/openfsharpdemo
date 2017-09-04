@@ -15,6 +15,7 @@ type Int64Path = PrintfFormat<(int64 -> string),unit,string,string,int64>
 
 let path_home = "/"
 let path_register = "/register"
+let path_api_register = "/api/register"
 let path_login = "/login"
 let path_create_product = "/product/create"
 let path_generate_product : Int64Path = "/product/generate/%i"
@@ -46,6 +47,7 @@ let generated_routes =
   [
     path path_home >=> home
     path path_register >=> register
+    path path_api_register >=> api_register
     path path_login >=> login
     path path_create_product >=> create_product
     pathScan path_generate_product generate_product

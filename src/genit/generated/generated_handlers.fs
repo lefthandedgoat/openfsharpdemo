@@ -31,30 +31,32 @@ let mapErrors validation = validation |> List.map (fun (_,error) -> error)
 
 let home = GET >=> OK view_jumbo_home
 
+let api_register =
+  choose
+    [
+      POST >=> request (fun req ->
+        let register = fromJson<Register> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+        let validation = validation_registerJson register
+        if validation = [] then
+          let id = insert_register register
+          OK ({ Data = id; Errors = [] } |> toJson)
+        else
+          let result = { Data = 0; Errors = mapErrors validation } |> toJson
+          BAD_REQUEST result)
+    ]
+
 let register =
   choose
     [
       GET >=> OK view_register
-      POST >=> request (fun req ->
-        match hasHeader ("content-type", "application/json") req with
-        | true ->
-            let register = fromJson<Register> (System.Text.Encoding.UTF8.GetString(req.rawForm))
-            let validation = validation_registerJson register
-            if validation = [] then
-              let id = insert_register register
-              OK ({ Data = id; Errors = [] } |> toJson)
-            else
-              let result = { Data = 0; Errors = mapErrors validation } |> toJson
-              BAD_REQUEST result
-        | false ->
-          bindToForm registerForm (fun registerForm ->
-            let validation = validation_registerForm registerForm
-            if validation = [] then
-              let converted = convert_registerForm registerForm
-              let id = insert_register converted
-              setAuthCookieAndRedirect id "/"
-            else
-              OK (view_errored_register validation registerForm)))
+      POST >=> bindToForm registerForm (fun registerForm ->
+        let validation = validation_registerForm registerForm
+        if validation = [] then
+          let converted = convert_registerForm registerForm
+          let id = insert_register converted
+          setAuthCookieAndRedirect id "/"
+        else
+          OK (view_errored_register validation registerForm))
     ]
 
 let login =

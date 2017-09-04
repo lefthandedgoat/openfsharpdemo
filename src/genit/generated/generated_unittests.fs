@@ -46,10 +46,6 @@ let run () =
     else if missing <> Set.empty then
       failwith (sprintf "Missing Errors: %A" missing)
 
-  let extract (response : Response) =
-    let body = match response.EntityBody with | Some body -> body | _ -> ""
-    JsonConvert.DeserializeObject<Result<_>>(body)
-
   let ( == ) response (right : 'a) =
     let body = match response.EntityBody with | Some body -> body | _ -> ""
     let left = JsonConvert.DeserializeObject<Result<'a>>(body)
@@ -64,7 +60,7 @@ let run () =
     let asJson = JsonConvert.SerializeObject(badRegistration)
 
     let response =
-      "http://localhost:8083/register"
+      "http://localhost:8083/api/register"
       |> createRequest Post
       |> withHeader (ContentType "application/json")
       |> withBody asJson
@@ -77,7 +73,7 @@ let run () =
     let asJson = JsonConvert.SerializeObject(validRegistration)
 
     let response =
-      "http://localhost:8083/register"
+      "http://localhost:8083/api/register"
       |> createRequest Post
       |> withHeader (ContentType "application/json")
       |> withBody asJson
