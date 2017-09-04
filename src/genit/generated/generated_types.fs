@@ -31,17 +31,18 @@ type Product =
     Category : string
   }
 
-type Cart =
-  {
-    CartID : int64
-    UserFK : int64
-  }
-
 type CartItem =
   {
     CartItemID : int64
     CartFK : int64
     ProductFK : int64
+  }
+
+type Cart =
+  {
+    CartID : int64
+    UserFK : int64
+    Items : CartItem list
   }
 
 type Checkout =

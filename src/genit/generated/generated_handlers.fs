@@ -198,6 +198,12 @@ let api_product id =
        Writers.setMimeType "application/json"
        >=> OK (toJson { Data = data; Errors = [] })
 
+let api_search_product =
+  GET >=> request (fun req ->
+      match req.queryParam "term" with
+      | Choice1Of2 term -> OK (toJson { Data = generated_data_access.search_product term; Errors = [] })
+      | Choice2Of2 _ -> OK (toJson { Data = []; Errors = ["No search term provided"] }))
+
 let api_create_product =
   POST >=> request (fun req ->
     let product = fromJson<Product> (System.Text.Encoding.UTF8.GetString(req.rawForm))
@@ -239,6 +245,7 @@ let api_cart id =
     match data with
     | None -> NOT_FOUND error_404
     | Some(data) ->
+       let data = { data with Items = getMany_cartItem_byCartId data.CartID }
        Writers.setMimeType "application/json"
        >=> OK (toJson { Data = data; Errors = [] })
 

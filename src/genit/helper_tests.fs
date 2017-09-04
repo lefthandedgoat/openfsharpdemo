@@ -123,3 +123,10 @@ let addCart cart =
   |> notEq 0L
   |> status' 200
   |> extract<int64>
+
+let getCart (id : int64) =
+  sprintf "/api/cart/%i" id
+  |> get
+  |> errors []
+  |> status' 200
+  |> extract<Cart>

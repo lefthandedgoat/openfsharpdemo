@@ -30,6 +30,7 @@ let badCart =
   {
     Cart.CartID = 0L
     UserFK = 0L
+    Items = []
   }
 
 ///////valid
@@ -55,4 +56,5 @@ let validCart =
   {
     Cart.CartID = 0L
     UserFK = 1L
+    Items = []
   }

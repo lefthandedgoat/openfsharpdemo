@@ -180,6 +180,19 @@ LIMIT 500
   command
   |> read toProduct
 
+let search_product term =
+  let sql = "
+SELECT * FROM best_online_store.products
+WHERE lower(name) LIKE lower(:term)
+   OR lower(description) LIKE lower(:term)
+   OR lower(category) LIKE lower(:term)
+LIMIT 100
+"
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "term" term
+  |> read toProduct
 
 let getManyWhere_product field how value =
   let field = to_postgres_dbColumn field
@@ -200,6 +213,7 @@ let toCart (reader : IDataReader) : Cart list =
     yield {
       CartID = getInt64 "cart_id" reader
       UserFK = getInt64 "register_fk" reader
+      Items = []
     }
   ]
 
@@ -324,6 +338,18 @@ WHERE cartitem_id = :cartitem_id
   |> param "cartitem_id" id
   |> read toCartItem
   |> firstOrNone
+
+let getMany_cartItem_byCartId id =
+  let sql = "
+SELECT * FROM best_online_store.cartitems
+WHERE cart_fk = :cart_fk
+LIMIT 500
+"
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "cart_fk" id
+  |> read toCartItem
 
 let getMany_cartItem () =
   let sql = "

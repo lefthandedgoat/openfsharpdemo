@@ -100,6 +100,20 @@ let run () =
     |> get
     |> status 404
 
+  "can search" &&&& fun _ ->
+    let guid = System.Guid.NewGuid().ToString()
+    let product = { fake_product () with Description = guid }
+    let id = addProduct product
+
+    let results =
+      sprintf "/api/product/search?term=%s" guid
+      |> get
+      |> errors []
+      |> status' 200
+      |> extract<Product list>
+
+    results == [ { product with ProductID = id } ]
+
   "Product: POST/PUT/GET/DELETE" &&& fun _ ->
     let fakeProduct = fake_product ()
 
@@ -149,8 +163,14 @@ let run () =
     let cartId = addCart { validCart with UserFK = userId }
     let item1 = { CartItemID = 0L; CartFK = cartId; ProductFK = productId1 }
 
-    "/api/cart/add"
-    |> post item1
-    |> errors []
-    |> notEq 0L
-    |> status 200
+    let cartItemId =
+      "/api/cart/add"
+      |> post item1
+      |> errors []
+      |> notEq 0L
+      |> status' 200
+      |> extract<int64>
+
+    getCart cartId == { CartID = cartId;
+                        UserFK = userId;
+                        Items = [ { CartItemID = cartItemId; CartFK = cartId; ProductFK = productId1 } ] }
