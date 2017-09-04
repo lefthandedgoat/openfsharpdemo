@@ -11,6 +11,7 @@ open Suave.Operators
 open helper_general
 open helper_html
 open forms
+open Suave.RequestErrors
 
 let withParam (key,value) path = sprintf "%s?%s=%s" path key value
 
@@ -54,7 +55,7 @@ let setAuthCookieAndRedirect id redirectTo =
 
 let viewGET id (bundle : Bundle<_,_>) =
   if bundle.tryById.IsNone || bundle.view_view.IsNone then
-    Suave.RequestErrors.NOT_FOUND error_404
+    NOT_FOUND error_404
   else
     let data = bundle.tryById.Value id
     match data with
@@ -63,16 +64,16 @@ let viewGET id (bundle : Bundle<_,_>) =
 
 let editGET id (bundle : Bundle<_,_>) =
   if bundle.tryById.IsNone || bundle.view_edit.IsNone then
-    OK error_404
+    NOT_FOUND error_404
   else
     let data = bundle.tryById.Value id
     match data with
-    | None -> OK error_404
+    | None -> NOT_FOUND error_404
     | Some(data) -> OK <| bundle.view_edit.Value data
 
 let editPOST (id : int64) form (bundle : Bundle<_,_>) =
   if bundle.validateForm.IsNone || bundle.convertForm.IsNone || bundle.update.IsNone || bundle.view_edit_errored.IsNone then
-    OK error_404
+    NOT_FOUND error_404
   else
     let validation = bundle.validateForm.Value form
     if validation = [] then
@@ -87,13 +88,13 @@ let editPOST (id : int64) form (bundle : Bundle<_,_>) =
 
 let createGET (bundle : Bundle<_,_>) =
   if bundle.view_create.IsNone then
-    OK error_404
+    NOT_FOUND error_404
   else
     OK bundle.view_create.Value
 
 let createPOST form (bundle : Bundle<_,_>) =
   if bundle.validateForm.IsNone || bundle.convertForm.IsNone || bundle.insert.IsNone || bundle.view_create_errored.IsNone then
-    OK error_404
+    NOT_FOUND error_404
   else
     let validation = bundle.validateForm.Value form
     if validation = [] then
@@ -109,7 +110,7 @@ let createPOST form (bundle : Bundle<_,_>) =
 let generateGET (count : int64) (bundle : Bundle<_,_>) =
   let count = int count
   if bundle.fake_many.IsNone || bundle.fake_single.IsNone || bundle.view_generate.IsNone then
-    OK error_404
+    NOT_FOUND error_404
   else
     if count > 1
     then
@@ -124,7 +125,7 @@ let generateGET (count : int64) (bundle : Bundle<_,_>) =
 
 let generatePOST form (bundle : Bundle<_,_>) =
   if bundle.validateForm.IsNone || bundle.convertForm.IsNone || bundle.insert.IsNone || bundle.view_generate_errored.IsNone then
-    OK error_404
+    NOT_FOUND error_404
   else
     let validation = bundle.validateForm.Value form
     if validation = [] then
@@ -139,7 +140,7 @@ let generatePOST form (bundle : Bundle<_,_>) =
 
 let searchGET req (bundle : Bundle<_,_>) =
   if bundle.getManyWhere.IsNone || bundle.view_search.IsNone then
-    OK error_404
+    NOT_FOUND error_404
   else
     if hasQueryString req "field" && hasQueryString req "how" && hasQueryString req "value"
     then

@@ -15,10 +15,8 @@ type Int64Path = PrintfFormat<(int64 -> string),unit,string,string,int64>
 
 let path_home = "/"
 let path_register = "/register"
-let path_api_register = "/api/register"
 let path_login = "/login"
 let path_create_product = "/product/create"
-let path_api_create_product = "/api/product/create"
 let path_generate_product : Int64Path = "/product/generate/%i"
 let path_view_product : Int64Path = "/product/view/%i"
 let path_edit_product : Int64Path = "/product/edit/%i"
@@ -39,10 +37,13 @@ let path_generate_checkout : Int64Path = "/checkout/generate/%i"
 let path_view_checkout : Int64Path = "/checkout/view/%i"
 let path_edit_checkout : Int64Path = "/checkout/edit/%i"
 let path_list_checkout = "/checkout/list"
-let path_api_user : Int64Path = "/api/user/view/%i"
-let path_api_product : Int64Path = "/api/product/view/%i"
-let path_api_cart : Int64Path = "/api/cart/view/%i"
-let path_api_checkout : Int64Path = "/api/checkout/view/%i"
+
+let path_api_register = "/api/register"
+let path_api_user : Int64Path = "/api/user/%i"
+let path_api_product : Int64Path = "/api/product/%i"
+let path_api_create_product = "/api/product/create"
+let path_api_cart : Int64Path = "/api/cart/%i"
+let path_api_checkout : Int64Path = "/api/checkout/%i"
 
 let generated_routes =
   [

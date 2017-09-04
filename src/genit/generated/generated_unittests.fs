@@ -8,6 +8,7 @@ open generated_types
 open Newtonsoft.Json
 open helper_tests
 open test_data
+open generated_fake_data
 
 let run () =
 
@@ -40,3 +41,16 @@ let run () =
     |> errors []
     |> notEq 0L
     |> status 200
+
+  "getting product works" &&& fun _ ->
+    let fakeProduct = fake_product ()
+    let id = addProduct fakeProduct
+
+    let product =
+      sprintf "/api/product/%i" id
+      |> get
+      |> errors []
+      |> status' 200
+      |> extract<Product>
+
+    product == { fakeProduct with ProductID = int64 id }

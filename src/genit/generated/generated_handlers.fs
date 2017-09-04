@@ -18,8 +18,6 @@ open generated_fake_data
 open generated_bundles
 open helper_html
 open helper_handler
-open Nessos.FsPickler
-open Nessos.FsPickler.Json
 open forms
 open Newtonsoft.Json
 open Suave.RequestErrors
@@ -30,20 +28,6 @@ let toJson obj = JsonConvert.SerializeObject(obj)
 let mapErrors validation = validation |> List.map (fun (_,error) -> error)
 
 let home = GET >=> OK view_jumbo_home
-
-let api_register =
-  choose
-    [
-      POST >=> request (fun req ->
-        let register = fromJson<Register> (System.Text.Encoding.UTF8.GetString(req.rawForm))
-        let validation = validation_registerJson register
-        if validation = [] then
-          let id = insert_register register
-          OK ({ Data = id; Errors = [] } |> toJson)
-        else
-          let result = { Data = 0; Errors = mapErrors validation } |> toJson
-          BAD_REQUEST result)
-    ]
 
 let register =
   choose
@@ -84,20 +68,6 @@ let create_product =
     [
       GET >=> warbler (fun _ -> createGET bundle_product)
       POST >=> bindToForm productForm (fun form -> createPOST form bundle_product)
-    ]
-
-let api_create_product =
-  choose
-    [
-      POST >=> request (fun req ->
-        let product = fromJson<Product> (System.Text.Encoding.UTF8.GetString(req.rawForm))
-        let validation = validation_productJson product
-        if validation = [] then
-          let id = insert_product product
-          OK ({ Data = id; Errors = [] } |> toJson)
-        else
-          let result = { Data = 0; Errors = mapErrors validation } |> toJson
-          BAD_REQUEST result)
     ]
 
 let generate_product count =
@@ -208,50 +178,57 @@ let edit_checkout id =
 let list_checkout =
   GET >=> warbler (fun _ -> getMany_checkout () |> view_list_checkout |> OK)
 
+let api_register =
+  choose
+    [
+      POST >=> request (fun req ->
+        let register = fromJson<Register> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+        let validation = validation_registerJson register
+        if validation = [] then
+          let id = insert_register register
+          OK ({ Data = id; Errors = [] } |> toJson)
+        else
+          let result = { Data = 0; Errors = mapErrors validation } |> toJson
+          BAD_REQUEST result)
+    ]
+
 let api_product id =
-  GET >=> request (fun req ->
+  GET >=>
     let data = tryById_product id
     match data with
-    | None -> OK error_404
+    | None -> NOT_FOUND error_404
     | Some(data) ->
-      match (getQueryStringValue req "format").ToLower() with
-      | "xml" ->
-         let serializer = FsPickler.CreateXmlSerializer(indent = true)
-         Writers.setMimeType "application/xml"
-         >=> OK (serializer.PickleToString(data))
-      | "json" | _ ->
-         let serializer = FsPickler.CreateJsonSerializer(indent = true)
-         Writers.setMimeType "application/json"
-         >=> OK (serializer.PickleToString(data)))
+       Writers.setMimeType "application/json"
+       >=> OK (toJson { Data = data; Errors = [] })
+
+let api_create_product =
+  choose
+    [
+      POST >=> request (fun req ->
+        let product = fromJson<Product> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+        let validation = validation_productJson product
+        if validation = [] then
+          let id = insert_product product
+          OK (toJson { Data = id; Errors = [] })
+        else
+          let result = { Data = 0; Errors = mapErrors validation } |> toJson
+          BAD_REQUEST result)
+    ]
 
 let api_cart id =
-  GET >=> request (fun req ->
+  GET >=>
     let data = tryById_cart id
     match data with
-    | None -> OK error_404
+    | None -> NOT_FOUND error_404
     | Some(data) ->
-      match (getQueryStringValue req "format").ToLower() with
-      | "xml" ->
-         let serializer = FsPickler.CreateXmlSerializer(indent = true)
-         Writers.setMimeType "application/xml"
-         >=> OK (serializer.PickleToString(data))
-      | "json" | _ ->
-         let serializer = FsPickler.CreateJsonSerializer(indent = true)
-         Writers.setMimeType "application/json"
-         >=> OK (serializer.PickleToString(data)))
+       Writers.setMimeType "application/json"
+       >=> OK (toJson { Data = data; Errors = [] })
 
 let api_checkout id =
-  GET >=> request (fun req ->
+  GET >=>
     let data = tryById_checkout id
     match data with
-    | None -> OK error_404
+    | None -> NOT_FOUND error_404
     | Some(data) ->
-      match (getQueryStringValue req "format").ToLower() with
-      | "xml" ->
-         let serializer = FsPickler.CreateXmlSerializer(indent = true)
-         Writers.setMimeType "application/xml"
-         >=> OK (serializer.PickleToString(data))
-      | "json" | _ ->
-         let serializer = FsPickler.CreateJsonSerializer(indent = true)
-         Writers.setMimeType "application/json"
-         >=> OK (serializer.PickleToString(data)))
+       Writers.setMimeType "application/json"
+       >=> OK (toJson { Data = data; Errors = [] })
