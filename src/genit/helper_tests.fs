@@ -66,3 +66,11 @@ let addProduct product =
   |> notEq 0L
   |> status' 200
   |> extract<int>
+
+let registerUser register =
+  "/api/register"
+  |> post register
+  |> errors []
+  |> notEq 0L
+  |> status' 200
+  |> extract<int>

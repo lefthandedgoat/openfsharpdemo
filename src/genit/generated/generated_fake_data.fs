@@ -4,6 +4,18 @@ open generated_types
 open generated_data_access
 open helper_general
 
+let fake_register () =
+  let fName = randomItem firstNames
+  let lName = randomItem lastNames
+
+  {
+    Register.UserID = 0L
+    FirstName = fName
+    LastName = lName
+    Email = fName + lName + "@fakeemail.com"
+    Password = "123456"
+  }
+
 let fake_product () =
   {
     ProductID = -1L
