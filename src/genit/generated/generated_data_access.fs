@@ -199,7 +199,7 @@ let toCart (reader : IDataReader) : Cart list =
   [ while reader.Read() do
     yield {
       CartID = getInt64 "cart_id" reader
-      RegisterFK = getInt64 "register_fk" reader
+      UserFK = getInt64 "register_fk" reader
     }
   ]
 
@@ -219,7 +219,7 @@ INSERT INTO best_online_store.carts
   use connection = connection connectionString
   use command = command connection sql
   command
-  |> param "register_fk" cart.RegisterFK
+  |> param "register_fk" cart.UserFK
   |> executeScalar
   |> string |> int64
 
@@ -236,7 +236,7 @@ WHERE cart_id = :cart_id;
   use command = command connection sql
   command
   |> param "cart_id" cart.CartID
-  |> param "register_fk" cart.RegisterFK
+  |> param "register_fk" cart.UserFK
   |> executeNonQuery
 
 

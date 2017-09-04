@@ -34,7 +34,7 @@ type Product =
 type Cart =
   {
     CartID : int64
-    RegisterFK : int64
+    UserFK : int64
   }
 
 type CartItem =

@@ -26,6 +26,12 @@ let badProduct =
     Category = ""
   }
 
+let badCart =
+  {
+    Cart.CartID = 0L
+    UserFK = 0L
+  }
+
 ///////valid
 let validRegistration =
   {
@@ -43,4 +49,10 @@ let validProduct =
     Description = "its great"
     Price = 1.0
     Category = "food"
+  }
+
+let validCart =
+  {
+    Cart.CartID = 0L
+    UserFK = 1L
   }

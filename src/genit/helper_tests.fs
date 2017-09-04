@@ -7,6 +7,10 @@ open HttpClient
 open generated_types
 open Newtonsoft.Json
 
+/////
+//assertions
+/////
+
 let status' expected (response : Response) =
   if response.StatusCode <> expected then
     failwith (sprintf "Expected StatusCode: %A, Got: %A" expected response.StatusCode)
@@ -46,6 +50,10 @@ let notEq (other : 'a) response =
   if left = other then failwith (sprintf "Expected NOT: %A, Got: %A" other left)
   response
 
+/////
+//verbs
+/////
+
 let post data uri =
   sprintf "http://localhost:8083%s" uri
   |> createRequest Post
@@ -70,6 +78,10 @@ let delete uri =
   sprintf "http://localhost:8083%s" uri
   |> createRequest Delete
   |> getResponse
+
+/////
+//actions
+/////
 
 let addProduct product =
   "/api/product/create"
@@ -99,6 +111,14 @@ let deleteProduct (id : int64) =
 let registerUser register =
   "/api/register"
   |> post register
+  |> errors []
+  |> notEq 0L
+  |> status' 200
+  |> extract<int64>
+
+let addCart cart =
+  "/api/cart/create"
+  |> post cart
   |> errors []
   |> notEq 0L
   |> status' 200

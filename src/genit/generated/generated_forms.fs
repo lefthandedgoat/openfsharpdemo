@@ -72,7 +72,7 @@ let cartForm : Form<CartForm> = Form ([],[])
 let convert_cartForm (cartForm : CartForm) : Cart =
   {
     CartID = int64 cartForm.CartID
-    RegisterFK = int64 cartForm.RegisterFK
+    UserFK = int64 cartForm.RegisterFK
   }
 
 type CartItemForm =

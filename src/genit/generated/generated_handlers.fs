@@ -242,6 +242,28 @@ let api_cart id =
        Writers.setMimeType "application/json"
        >=> OK (toJson { Data = data; Errors = [] })
 
+let api_create_cart =
+  POST >=> request (fun req ->
+    let cart = fromJson<Cart> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+    let validation = validation_cartJson cart
+    if validation = [] then
+      let id = insert_cart cart
+      OK (toJson { Data = id; Errors = [] })
+    else
+      let result = { Data = 0; Errors = mapErrors validation } |> toJson
+      BAD_REQUEST result)
+
+let api_add_to_cart =
+  POST >=> request (fun req ->
+    let cartItem = fromJson<CartItem> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+    let validation = validation_cartItemJson cartItem
+    if validation = [] then
+      let id = insert_cartItem cartItem
+      OK (toJson { Data = id; Errors = [] })
+    else
+      let result = { Data = 0; Errors = mapErrors validation } |> toJson
+      BAD_REQUEST result)
+
 let api_checkout id =
   GET >=>
     let data = tryById_checkout id

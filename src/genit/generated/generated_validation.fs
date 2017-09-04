@@ -58,10 +58,21 @@ let validation_cartForm (cartForm : CartForm) =
     validate_integer "Register FK" cartForm.RegisterFK
   ] |> List.choose id
 
+let validation_cartJson (cart: Cart) =
+  [
+    validate_required "User FK" cart.UserFK
+  ] |> List.choose id
+
 let validation_cartItemForm (cartItemForm : CartItemForm) =
   [
     validate_integer "Cart FK" cartItemForm.CartFK
     validate_integer "Product FK" cartItemForm.ProductFK
+  ] |> List.choose id
+
+let validation_cartItemJson (cartItem: CartItem) =
+  [
+    validate_required "Cart FK" cartItem.CartFK
+    validate_required "Product FK" cartItem.ProductFK
   ] |> List.choose id
 
 let validation_checkoutForm (checkoutForm : CheckoutForm) =

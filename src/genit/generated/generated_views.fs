@@ -51,7 +51,7 @@ let view_errored_register errors (registerForm : RegisterForm) =
       common_register_form
         "Register"
         [
-          hiddenInput "UserID" registerForm.UserID 
+          hiddenInput "UserID" registerForm.UserID
           errored_icon_label_text "First Name" registerForm.FirstName "user" errors
           errored_icon_label_text "Last Name" registerForm.LastName "user" errors
           errored_icon_label_text "Email" registerForm.Email "envelope" errors
@@ -90,7 +90,7 @@ let view_errored_login errors (loginForm : LoginForm) =
       common_register_form
         "Login"
         [
-          hiddenInput "UserID" loginForm.UserID 
+          hiddenInput "UserID" loginForm.UserID
           errored_icon_label_text "Email" loginForm.Email "envelope" errors
           errored_icon_password_text "Password" loginForm.Password "lock" errors
         ]
@@ -122,7 +122,7 @@ let view_create_errored_product errors (productForm : ProductForm) =
       common_form
         "Create Product"
         [
-          hiddenInput "ProductID" productForm.ProductID 
+          hiddenInput "ProductID" productForm.ProductID
           errored_label_text "Name" (string productForm.Name) errors
           errored_label_text "Description" (string productForm.Description) errors
           errored_label_text "Price" (string productForm.Price) errors
@@ -139,7 +139,7 @@ let view_generate_product (product : Product) =
       common_form
         "Generate Product"
         [
-          hiddenInput "ProductID" product.ProductID 
+          hiddenInput "ProductID" product.ProductID
           label_text "Name" product.Name
           label_text "Description" product.Description
           label_text "Price" product.Price
@@ -156,7 +156,7 @@ let view_generate_errored_product errors (productForm : ProductForm) =
       common_form
         "Generate Product"
         [
-          hiddenInput "ProductID" productForm.ProductID 
+          hiddenInput "ProductID" productForm.ProductID
           errored_label_text "Name" (string productForm.Name) errors
           errored_label_text "Description" (string productForm.Description) errors
           errored_label_text "Price" (string productForm.Price) errors
@@ -174,7 +174,7 @@ let view_view_product (product : Product) =
       common_static_form button
         "Product"
         [
-          
+
           label_static "Name" product.Name
           label_static "Description" product.Description
           label_static "Price" product.Price
@@ -191,7 +191,7 @@ let view_edit_product (product : Product) =
       common_form
         "Edit Product"
         [
-          hiddenInput "ProductID" product.ProductID 
+          hiddenInput "ProductID" product.ProductID
           label_text "Name" product.Name
           label_text "Description" product.Description
           label_text "Price" product.Price
@@ -208,7 +208,7 @@ let view_edit_errored_product errors (productForm : ProductForm) =
       common_form
         "Edit Product"
         [
-          hiddenInput "ProductID" productForm.ProductID 
+          hiddenInput "ProductID" productForm.ProductID
           errored_label_text "Name" (string productForm.Name) errors
           errored_label_text "Description" (string productForm.Description) errors
           errored_label_text "Price" (string productForm.Price) errors
@@ -318,7 +318,7 @@ let view_create_cart =
         "Create Cart"
         [
           hiddenInput "CartID" "-1"
-          label_text "Register FK" ""
+          label_text "User FK" ""
         ]
     ]
     scripts.common
@@ -331,8 +331,8 @@ let view_create_errored_cart errors (cartForm : CartForm) =
       common_form
         "Create Cart"
         [
-          hiddenInput "CartID" cartForm.CartID 
-          errored_label_text "Register FK" (string cartForm.RegisterFK) errors
+          hiddenInput "CartID" cartForm.CartID
+          errored_label_text "User FK" (string cartForm.RegisterFK) errors
         ]
     ]
     scripts.common
@@ -345,8 +345,8 @@ let view_generate_cart (cart : Cart) =
       common_form
         "Generate Cart"
         [
-          hiddenInput "CartID" cart.CartID 
-          label_text "Register FK" cart.RegisterFK
+          hiddenInput "CartID" cart.CartID
+          label_text "User FK" cart.UserFK
         ]
     ]
     scripts.common
@@ -359,8 +359,8 @@ let view_generate_errored_cart errors (cartForm : CartForm) =
       common_form
         "Generate Cart"
         [
-          hiddenInput "CartID" cartForm.CartID 
-          errored_label_text "Register FK" (string cartForm.RegisterFK) errors
+          hiddenInput "CartID" cartForm.CartID
+          errored_label_text "User FK" (string cartForm.RegisterFK) errors
         ]
     ]
     scripts.common
@@ -374,8 +374,8 @@ let view_view_cart (cart : Cart) =
       common_static_form button
         "Cart"
         [
-          
-          label_static "Register FK" cart.RegisterFK
+
+          label_static "User FK" cart.UserFK
         ]
     ]
     scripts.common
@@ -388,8 +388,8 @@ let view_edit_cart (cart : Cart) =
       common_form
         "Edit Cart"
         [
-          hiddenInput "CartID" cart.CartID 
-          label_text "Register FK" cart.RegisterFK
+          hiddenInput "CartID" cart.CartID
+          label_text "User FK" cart.UserFK
         ]
     ]
     scripts.common
@@ -402,8 +402,8 @@ let view_edit_errored_cart errors (cartForm : CartForm) =
       common_form
         "Edit Cart"
         [
-          hiddenInput "CartID" cartForm.CartID 
-          errored_label_text "Register FK" (string cartForm.RegisterFK) errors
+          hiddenInput "CartID" cartForm.CartID
+          errored_label_text "User FK" (string cartForm.RegisterFK) errors
         ]
     ]
     scripts.common
@@ -415,7 +415,7 @@ let view_list_cart carts =
   let toTd (cart : Cart) =
     [
         td [ text (string cart.CartID) ]
-        td [ text (string cart.RegisterFK) ]
+        td [ text (string cart.UserFK) ]
     ]
 
   base_html
@@ -431,7 +431,7 @@ let view_list_cart carts =
                 table_bordered_linked_tr
                   [
                     "Cart ID"
-                    "Register FK"
+                    "User FK"
                   ]
                   carts toTd toTr
               ]
@@ -465,7 +465,7 @@ let view_create_errored_cartItem errors (cartItemForm : CartItemForm) =
       common_form
         "Create CartItem"
         [
-          hiddenInput "CartItemID" cartItemForm.CartItemID 
+          hiddenInput "CartItemID" cartItemForm.CartItemID
           errored_label_text "Cart FK" (string cartItemForm.CartFK) errors
           errored_label_text "Product FK" (string cartItemForm.ProductFK) errors
         ]
@@ -480,7 +480,7 @@ let view_generate_cartItem (cartItem : CartItem) =
       common_form
         "Generate CartItem"
         [
-          hiddenInput "CartItemID" cartItem.CartItemID 
+          hiddenInput "CartItemID" cartItem.CartItemID
           label_text "Cart FK" cartItem.CartFK
           label_text "Product FK" cartItem.ProductFK
         ]
@@ -495,7 +495,7 @@ let view_generate_errored_cartItem errors (cartItemForm : CartItemForm) =
       common_form
         "Generate CartItem"
         [
-          hiddenInput "CartItemID" cartItemForm.CartItemID 
+          hiddenInput "CartItemID" cartItemForm.CartItemID
           errored_label_text "Cart FK" (string cartItemForm.CartFK) errors
           errored_label_text "Product FK" (string cartItemForm.ProductFK) errors
         ]
@@ -511,7 +511,7 @@ let view_view_cartItem (cartItem : CartItem) =
       common_static_form button
         "CartItem"
         [
-          
+
           label_static "Cart FK" cartItem.CartFK
           label_static "Product FK" cartItem.ProductFK
         ]
@@ -526,7 +526,7 @@ let view_edit_cartItem (cartItem : CartItem) =
       common_form
         "Edit CartItem"
         [
-          hiddenInput "CartItemID" cartItem.CartItemID 
+          hiddenInput "CartItemID" cartItem.CartItemID
           label_text "Cart FK" cartItem.CartFK
           label_text "Product FK" cartItem.ProductFK
         ]
@@ -541,7 +541,7 @@ let view_edit_errored_cartItem errors (cartItemForm : CartItemForm) =
       common_form
         "Edit CartItem"
         [
-          hiddenInput "CartItemID" cartItemForm.CartItemID 
+          hiddenInput "CartItemID" cartItemForm.CartItemID
           errored_label_text "Cart FK" (string cartItemForm.CartFK) errors
           errored_label_text "Product FK" (string cartItemForm.ProductFK) errors
         ]
@@ -606,7 +606,7 @@ let view_create_errored_checkout errors (checkoutForm : CheckoutForm) =
       common_form
         "Create Checkout"
         [
-          hiddenInput "CheckoutID" checkoutForm.CheckoutID 
+          hiddenInput "CheckoutID" checkoutForm.CheckoutID
           errored_label_text "Cart FK" (string checkoutForm.CartFK) errors
         ]
     ]
@@ -620,7 +620,7 @@ let view_generate_checkout (checkout : Checkout) =
       common_form
         "Generate Checkout"
         [
-          hiddenInput "CheckoutID" checkout.CheckoutID 
+          hiddenInput "CheckoutID" checkout.CheckoutID
           label_text "Cart FK" checkout.CartFK
         ]
     ]
@@ -634,7 +634,7 @@ let view_generate_errored_checkout errors (checkoutForm : CheckoutForm) =
       common_form
         "Generate Checkout"
         [
-          hiddenInput "CheckoutID" checkoutForm.CheckoutID 
+          hiddenInput "CheckoutID" checkoutForm.CheckoutID
           errored_label_text "Cart FK" (string checkoutForm.CartFK) errors
         ]
     ]
@@ -649,7 +649,7 @@ let view_view_checkout (checkout : Checkout) =
       common_static_form button
         "Checkout"
         [
-          
+
           label_static "Cart FK" checkout.CartFK
         ]
     ]
@@ -663,7 +663,7 @@ let view_edit_checkout (checkout : Checkout) =
       common_form
         "Edit Checkout"
         [
-          hiddenInput "CheckoutID" checkout.CheckoutID 
+          hiddenInput "CheckoutID" checkout.CheckoutID
           label_text "Cart FK" checkout.CartFK
         ]
     ]
@@ -677,7 +677,7 @@ let view_edit_errored_checkout errors (checkoutForm : CheckoutForm) =
       common_form
         "Edit Checkout"
         [
-          hiddenInput "CheckoutID" checkoutForm.CheckoutID 
+          hiddenInput "CheckoutID" checkoutForm.CheckoutID
           errored_label_text "Cart FK" (string checkoutForm.CartFK) errors
         ]
     ]

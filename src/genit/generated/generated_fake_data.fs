@@ -34,7 +34,7 @@ let fake_many_product number =
 let fake_cart () =
   {
     CartID = -1L
-    RegisterFK = random.Next(100) |> int64
+    UserFK = random.Next(100) |> int64
   }
 
 let fake_many_cart number =

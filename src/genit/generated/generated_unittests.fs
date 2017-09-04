@@ -122,3 +122,35 @@ let run () =
     sprintf "/api/product/%i" id
     |> get
     |> status 404
+
+  context "Cart"
+
+  //delete
+  "cart validation works" &&& fun _ ->
+    "/api/cart/create"
+    |> post badCart
+    |> errors ["User FK is required"]
+    |> status 400
+
+  //delete
+  "good cart works" &&& fun _ -> // *
+    let id = registerUser (fake_register())
+    let cart = { validCart with UserFK = id }
+
+    "/api/cart/create"
+    |> post cart
+    |> errors []
+    |> notEq 0L
+    |> status 200
+
+  "can add products to cart" &&& fun _ -> // *
+    let productId1 = addProduct (fake_product())
+    let userId = registerUser (fake_register())
+    let cartId = addCart { validCart with UserFK = userId }
+    let item1 = { CartItemID = 0L; CartFK = cartId; ProductFK = productId1 }
+
+    "/api/cart/add"
+    |> post item1
+    |> errors []
+    |> notEq 0L
+    |> status 200
