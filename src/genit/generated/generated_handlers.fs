@@ -271,11 +271,14 @@ let api_add_to_cart =
       let result = { Data = 0; Errors = mapErrors validation } |> toJson
       BAD_REQUEST result)
 
-let api_checkout id =
-  GET >=>
-    let data = tryById_checkout id
-    match data with
-    | None -> NOT_FOUND error_404
-    | Some(data) ->
-       Writers.setMimeType "application/json"
-       >=> OK (toJson { Data = data; Errors = [] })
+let api_checkout =
+  POST >=> request (fun req ->
+    let checkout = fromJson<Checkout> (System.Text.Encoding.UTF8.GetString(req.rawForm))
+    let validation = validation_checkoutJson checkout
+    if validation = [] then
+      let id = insert_checkout checkout
+      delete_cartItems checkout.CartFK
+      OK (toJson { Data = id; Errors = [] })
+    else
+      let result = { Data = 0; Errors = mapErrors validation } |> toJson
+      BAD_REQUEST result)

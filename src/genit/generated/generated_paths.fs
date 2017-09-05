@@ -32,7 +32,7 @@ let path_generate_cartItem : Int64Path = "/cartItem/generate/%i"
 let path_view_cartItem : Int64Path = "/cartItem/view/%i"
 let path_edit_cartItem : Int64Path = "/cartItem/edit/%i"
 let path_list_cartItem = "/cartItem/list"
-let path_create_checkout = "/checkout/create"
+let path_checkout = "/checkout"
 let path_generate_checkout : Int64Path = "/checkout/generate/%i"
 let path_view_checkout : Int64Path = "/checkout/view/%i"
 let path_edit_checkout : Int64Path = "/checkout/edit/%i"
@@ -48,7 +48,7 @@ let path_api_delete_product : Int64Path = "/api/product/delete/%i"
 let path_api_cart : Int64Path = "/api/cart/%i"
 let path_api_create_cart = "/api/cart/create"
 let path_api_add_to_cart = "/api/cart/add"
-let path_api_checkout : Int64Path = "/api/checkout/%i"
+let path_api_checkout = "/api/checkout"
 
 let generated_routes =
   [
@@ -72,7 +72,7 @@ let generated_routes =
     pathScan path_view_cartItem view_cartItem
     pathScan path_edit_cartItem edit_cartItem
     path path_list_cartItem >=> list_cartItem
-    path path_create_checkout >=> loggedOn path_login create_checkout
+    path path_checkout >=> loggedOn path_login create_checkout
     pathScan path_generate_checkout (fun id -> loggedOn path_login (generate_checkout id))
     pathScan path_view_checkout (fun id -> loggedOn path_login (view_checkout id))
     pathScan path_edit_checkout (fun id -> loggedOn path_login (edit_checkout id))
@@ -88,5 +88,5 @@ let generated_routes =
     path path_api_create_cart >=> api_create_cart
     path path_api_add_to_cart >=> api_add_to_cart
 
-    pathScan path_api_checkout api_checkout
+    path path_api_checkout >=> api_checkout
   ]

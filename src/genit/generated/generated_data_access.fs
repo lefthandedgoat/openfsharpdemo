@@ -266,6 +266,17 @@ WHERE cart_id = :cart_id
   |> read toCart
   |> firstOrNone
 
+let delete_cart id =
+  let sql = "
+DLEETE FROM best_online_store.carts
+WHERE cart_id = :cart_id
+"
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "cart_id" id
+  |> executeNonQuery
+
 let getMany_cart () =
   let sql = "
 SELECT * FROM best_online_store.carts
@@ -338,6 +349,17 @@ WHERE cartitem_id = :cartitem_id
   |> param "cartitem_id" id
   |> read toCartItem
   |> firstOrNone
+
+let delete_cartItems cartId =
+  let sql = "
+DELETE FROM best_online_store.cartitems
+WHERE cart_fk = :cart_fk
+"
+  use connection = connection connectionString
+  use command = command connection sql
+  command
+  |> param "cart_fk" cartId
+  |> executeNonQuery
 
 let getMany_cartItem_byCartId id =
   let sql = "

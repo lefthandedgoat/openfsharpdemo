@@ -136,3 +136,10 @@ let getCart (id : int64) =
   |> errors []
   |> status' 200
   |> extract<Cart>
+
+let addToCart cartItem =
+  "/api/cart/add"
+  |> post cartItem
+  |> errors []
+  |> notEq 0L
+  |> status 200

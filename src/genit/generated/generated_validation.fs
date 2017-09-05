@@ -79,3 +79,8 @@ let validation_checkoutForm (checkoutForm : CheckoutForm) =
   [
     validate_integer "Cart FK" checkoutForm.CartFK
   ] |> List.choose id
+
+let validation_checkoutJson (checkout : Checkout) =
+  [
+    validate_required "Cart FK" checkout.CartFK
+  ] |> List.choose id

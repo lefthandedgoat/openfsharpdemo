@@ -183,3 +183,27 @@ let run () =
     getCart cartId == { CartID = cartId;
                         UserFK = userId;
                         Items = [ { CartItemID = cartItemId; CartFK = cartId; ProductFK = productId1 } ] }
+
+
+  context "Secnarios"
+
+  "Register -> New Product -> Add to Cart -> Checkout" &&& fun _ ->
+    let userId = registerUser (fake_register())
+    let productId1 = addProduct (fake_product())
+    let cartId = addCart { validCart with UserFK = userId }
+    addToCart { CartItemID = 0L; CartFK = cartId; ProductFK = productId1 }
+
+    "/api/checkout"
+    |> post { Checkout.CheckoutID = 0L; CartFK = cartId }
+    |> errors []
+    |> notEq 0L
+    |> status 200
+
+    //cart is empty!
+    let cart =
+      sprintf "/api/cart/%i" cartId
+      |> get
+      |> status' 200
+      |> extract<Cart>
+
+    cart == { Items = []; CartID = cartId; UserFK = userId }
