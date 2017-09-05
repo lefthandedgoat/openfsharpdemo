@@ -3,7 +3,8 @@ source https://nuget.org/api/v2
 nuget FAKE
 nuget Suave
 nuget Suave.Experimental
-nuget canopy
+nuget canopy = 1.5.0
+nuget canopy.integration = 1.5.0
 nuget Npgsql ~> 3.0.8
 nuget Http.fs
 nuget BCrypt-Official

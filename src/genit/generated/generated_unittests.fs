@@ -51,6 +51,7 @@ let run () =
       |> get
       |> errors []
       |> status' 200
+      |> validateJson contracts.product
       |> extract<Product>
 
     product == { fakeProduct with ProductID = id }

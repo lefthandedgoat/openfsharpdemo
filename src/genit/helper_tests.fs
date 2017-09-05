@@ -50,6 +50,12 @@ let notEq (other : 'a) response =
   if left = other then failwith (sprintf "Expected NOT: %A, Got: %A" other left)
   response
 
+let validateJson example response =
+  let body = match response.EntityBody with | Some body -> body | _ -> ""
+  let actual = body
+  jsonValidator.validate example actual
+  response
+
 /////
 //verbs
 /////
