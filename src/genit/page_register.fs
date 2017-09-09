@@ -18,7 +18,7 @@ let _first_name = placeholder "First Name"
 let _last_name = placeholder "Last Name"
 let _email = placeholder "Email"
 let _password = placeholder "Password"
-let _repeat = placeholder "Repeat Password"
+let _confirm = placeholder "Confirm Password"
 let _submit = value "Submit"
 
 //validation messages
@@ -27,7 +27,7 @@ let _last_name64 =  text "Last Name can not be more than 64 characters"
 let _nameTaken =  text "Name is already taken"
 let _emailNotValid =  text "Email is not a valid email"
 let _password6to10 = text "Password must be between 6 and 100 characters"
-let _passwordsMatch = text "Passwords must match"
+let _passwordsMatch = text "Confirm Password must be the same as Password"
 
 //helpers
 let generateUniqueUser () =
@@ -72,7 +72,7 @@ let password length validation =
     displayed _password6to10
     let password = genChars length
     _password << password
-    _repeat << password
+    _confirm << password
     click _submit
     notDisplayed _password6to10
   | Invalid ->
@@ -87,7 +87,7 @@ let tryRegister firstName lastName email =
   _last_name << lastName
   _email << email
   _password << "test1234"
-  _repeat << "test1234"
+  _confirm << "test1234"
 
   click _submit
 

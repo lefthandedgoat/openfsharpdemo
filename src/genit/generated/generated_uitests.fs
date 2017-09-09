@@ -50,7 +50,7 @@ let run () =
     click _submit
     notDisplayed _emailNotValid
 
-  "Password invalid" &&&& fun _ ->
+  "Password invalid" &&& fun _ ->
     password 1 Invalid
     password 2 Invalid
     password 3 Invalid
@@ -66,7 +66,7 @@ let run () =
 
   "Password mismatch" &&& fun _ ->
     _password << "123456"
-    _repeat << "654321"
+    _confirm << "654321"
     click _submit
     displayed _passwordsMatch
 
@@ -77,7 +77,7 @@ let run () =
     _last_name << lastName
     _email << email
     _password << "test1234"
-    _repeat << "test1234"
+    _confirm << "test1234"
     click _submit
 
     on baseuri
@@ -98,29 +98,3 @@ let run () =
     displayed "Price is required"
     displayed "Price is not a valid number (decimal)"
     displayed "Category is required"
-
-  context "Cart"
-
-  once (fun _ -> url "http://localhost:8083/cart/create"; click ".btn")
-
-  "Register FK must be a valid integer" &&& fun _ ->
-    displayed "Register FK is not a valid number (int)"
-
-
-  context "CartItem"
-
-  once (fun _ -> url "http://localhost:8083/cartItem/create"; click ".btn")
-
-  "Cart FK must be a valid integer" &&& fun _ ->
-    displayed "Cart FK is not a valid number (int)"
-
-  "Product FK must be a valid integer" &&& fun _ ->
-    displayed "Product FK is not a valid number (int)"
-
-
-  context "Checkout"
-
-  once (fun _ -> url "http://localhost:8083/checkout/create"; click ".btn")
-
-  "Cart FK must be a valid integer" &&& fun _ ->
-    displayed "Cart FK is not a valid number (int)"
