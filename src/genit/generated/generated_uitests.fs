@@ -50,7 +50,7 @@ let run () =
     click _submit
     notDisplayed _emailNotValid
 
-  "Password invalid" &&& fun _ ->
+  "Password invalid" &&&& fun _ ->
     password 1 Invalid
     password 2 Invalid
     password 3 Invalid
