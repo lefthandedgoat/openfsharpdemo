@@ -93,6 +93,8 @@
     <Compile Include="contracts.fs" />
     <Compile Include="helper_tests.fs" />
     <Compile Include="generated/generated_unittests.fs" />
+    <Compile Include="canopyExtensions.fs" />
+    <Compile Include="page_register.fs" />
     <Compile Include="generated/generated_uitests.fs" />
     <Compile Include="Program.fs" />
     <Content Include="LICENSE.txt">

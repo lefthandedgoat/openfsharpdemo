@@ -38,8 +38,8 @@ if generate then
   ()
   //generator.generate <| script.someSite()
 else if test then
-  generated_unittests.run()
-  //generated_uitests.run()
+  //generated_unittests.run()
+  generated_uitests.run()
 
   canopy.runner.run()
   canopy.core.quit()

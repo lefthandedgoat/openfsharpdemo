@@ -8,6 +8,8 @@ let validation_registerForm (registerForm : RegisterForm) =
   [
     validate_required "First Name" registerForm.FirstName
     validate_required "Last Name" registerForm.LastName
+    validate_max_length "First Name" 64 registerForm.FirstName
+    validate_max_length "Last Name" 64 registerForm.FirstName
     validate_email "Email" registerForm.Email
     validate_required "Email" registerForm.Email
     validate_password "Password" registerForm.Password
