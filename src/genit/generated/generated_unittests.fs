@@ -157,7 +157,7 @@ let run () =
 
   //delete
   "good cart works" &&& fun _ -> // *
-    let id = registerUser (fake_register())
+    let id = registerUser (fake_registration())
     let cart = { validCart with UserFK = id }
 
     "/api/cart/create"
@@ -168,7 +168,7 @@ let run () =
 
   "can add products to cart" &&& fun _ -> // *
     let productId1 = addProduct (fake_product())
-    let userId = registerUser (fake_register())
+    let userId = registerUser (fake_registration())
     let cartId = addCart { validCart with UserFK = userId }
     let item1 = { CartItemID = 0L; CartFK = cartId; ProductFK = productId1 }
 
@@ -188,7 +188,7 @@ let run () =
   context "Secnarios"
 
   "Register -> New Product -> Add to Cart -> Checkout" &&& fun _ ->
-    let userId = registerUser (fake_register())
+    let userId = registerUser (fake_registration())
     let productId1 = addProduct (fake_product())
     let cartId = addCart { validCart with UserFK = userId }
     addToCart { CartItemID = 0L; CartFK = cartId; ProductFK = productId1 }

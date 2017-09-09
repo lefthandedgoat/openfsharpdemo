@@ -4,7 +4,7 @@ open generated_types
 open generated_data_access
 open helper_general
 
-let fake_register () =
+let fake_registration () =
   let fName = randomItem firstNames
   let lName = randomItem lastNames
 
