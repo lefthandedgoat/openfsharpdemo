@@ -63,32 +63,8 @@ let login =
           OK (view_errored_login validation loginForm)))
     ]
 
-let create_product =
-  choose
-    [
-      GET >=> warbler (fun _ -> createGET bundle_product)
-      POST >=> bindToForm productForm (fun form -> createPOST form bundle_product)
-    ]
-
-let generate_product count =
-  choose
-    [
-      GET >=> warbler (fun _ -> generateGET count bundle_product)
-      POST >=> bindToForm productForm (fun form -> generatePOST form bundle_product)
-    ]
-
 let view_product id =
   GET >=> warbler (fun _ -> viewGET id bundle_product)
-
-let edit_product id =
-  choose
-    [
-      GET >=> warbler (fun _ -> editGET id bundle_product)
-      POST >=> bindToForm productForm (fun productForm -> editPOST id productForm bundle_product)
-    ]
-
-let list_product =
-  GET >=> warbler (fun _ -> getMany_product () |> view_list_product |> OK)
 
 let search_product =
   choose
@@ -97,59 +73,9 @@ let search_product =
       POST >=> bindToForm searchForm (fun searchForm -> searchPOST searchForm bundle_product)
     ]
 
-let create_cart =
-  choose
-    [
-      GET >=> warbler (fun _ -> createGET bundle_cart)
-      POST >=> bindToForm cartForm (fun form -> createPOST form bundle_cart)
-    ]
-
-let generate_cart count =
-  choose
-    [
-      GET >=> warbler (fun _ -> generateGET count bundle_cart)
-      POST >=> bindToForm cartForm (fun form -> generatePOST form bundle_cart)
-    ]
-
 let view_cart id =
   GET >=> warbler (fun _ -> viewGET id bundle_cart)
 
-let edit_cart id =
-  choose
-    [
-      GET >=> warbler (fun _ -> editGET id bundle_cart)
-      POST >=> bindToForm cartForm (fun cartForm -> editPOST id cartForm bundle_cart)
-    ]
-
-let list_cart =
-  GET >=> warbler (fun _ -> getMany_cart () |> view_list_cart |> OK)
-
-let create_cartItem =
-  choose
-    [
-      GET >=> warbler (fun _ -> createGET bundle_cartItem)
-      POST >=> bindToForm cartItemForm (fun form -> createPOST form bundle_cartItem)
-    ]
-
-let generate_cartItem count =
-  choose
-    [
-      GET >=> warbler (fun _ -> generateGET count bundle_cartItem)
-      POST >=> bindToForm cartItemForm (fun form -> generatePOST form bundle_cartItem)
-    ]
-
-let view_cartItem id =
-  GET >=> warbler (fun _ -> viewGET id bundle_cartItem)
-
-let edit_cartItem id =
-  choose
-    [
-      GET >=> warbler (fun _ -> editGET id bundle_cartItem)
-      POST >=> bindToForm cartItemForm (fun cartItemForm -> editPOST id cartItemForm bundle_cartItem)
-    ]
-
-let list_cartItem =
-  GET >=> warbler (fun _ -> getMany_cartItem () |> view_list_cartItem |> OK)
 
 let create_checkout =
   choose
@@ -157,26 +83,6 @@ let create_checkout =
       GET >=> warbler (fun _ -> createGET bundle_checkout)
       POST >=> bindToForm checkoutForm (fun form -> createPOST form bundle_checkout)
     ]
-
-let generate_checkout count =
-  choose
-    [
-      GET >=> warbler (fun _ -> generateGET count bundle_checkout)
-      POST >=> bindToForm checkoutForm (fun form -> generatePOST form bundle_checkout)
-    ]
-
-let view_checkout id =
-  GET >=> warbler (fun _ -> viewGET id bundle_checkout)
-
-let edit_checkout id =
-  choose
-    [
-      GET >=> warbler (fun _ -> editGET id bundle_checkout)
-      POST >=> bindToForm checkoutForm (fun checkoutForm -> editPOST id checkoutForm bundle_checkout)
-    ]
-
-let list_checkout =
-  GET >=> warbler (fun _ -> getMany_checkout () |> view_list_checkout |> OK)
 
 let api_register =
   POST >=> request (fun req ->

@@ -5,6 +5,8 @@ open generated_validation
 open canopy
 open canopyExtensions
 open page_register
+open generated_fake_data
+open helper_tests
 
 let run () =
 
@@ -88,13 +90,19 @@ let run () =
 
 
 
-  context "Product"
+  context "Scenario"
 
-  once (fun _ -> url "http://localhost:8083/product/create"; click ".btn")
+  "Register -> Search -> Add to Cart -> Checkout" &&& fun _ ->
+    let firstName, lastName, email = generateUniqueUser ()
+    let product = fake_product()
 
-  "New product validation" &&& fun _ ->
-    displayed "Name is required"
-    displayed "Description is required"
-    displayed "Price is required"
-    displayed "Price is not a valid number (decimal)"
-    displayed "Category is required"
+    addProduct product |> ignore
+    register firstName lastName email
+
+    url "http://localhost:8083/product/search"
+    "[name='Value']" << product.Name
+
+    click "Submit"
+    click "tbody tr:first"
+
+    on "http://google.com"

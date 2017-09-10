@@ -166,7 +166,7 @@ let view_generate_errored_product errors (productForm : ProductForm) =
     scripts.common
 
 let view_view_product (product : Product) =
-  let button = button_small_success_right (sprintf "/product/edit/%i" product.ProductID) [ text "Edit" ]
+  let button = button_small_success_right (sprintf "/product/edit/%i" product.ProductID) [ text "Add to Cart" ]
   base_html
     "Product"
     (base_header brand)
@@ -258,7 +258,7 @@ let view_list_product products =
     scripts.datatable_bundle
 
 let view_search_product field how value products =
-  let fields = ["Name", "Name"; "Food","Food"; "City", "City"]
+  let fields = ["Name", "Name"; "Description","Description"; "Category", "Category"]
   let hows = ["Equals", "Equals"; "Begins With","Begins With"]
   let toTr (product : Product) inner =
     trLink (sprintf "/product/view/%i" product.ProductID) inner
