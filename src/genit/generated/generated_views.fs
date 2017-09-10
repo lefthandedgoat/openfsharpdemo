@@ -166,15 +166,15 @@ let view_generate_errored_product errors (productForm : ProductForm) =
     scripts.common
 
 let view_view_product (product : Product) =
-  let button = button_small_success_right (sprintf "/product/edit/%i" product.ProductID) [ text "Add to Cart" ]
+  let button = inputAttr [ "value","Add to Cart"; "type","submit"; "class","btn btn-success pull-right"; ]
   base_html
     "Product"
     (base_header brand)
     [
-      common_static_form button
+      common_static_form' "/cart/add" button
         "Product"
         [
-
+          hiddenInput "ProductID" product.ProductID
           label_static "Name" product.Name
           label_static "Description" product.Description
           label_static "Price" product.Price

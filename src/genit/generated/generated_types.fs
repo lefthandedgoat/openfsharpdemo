@@ -50,3 +50,7 @@ type Checkout =
     CheckoutID : int64
     CartFK : int64
   }
+
+type Session =
+  | NoSession
+  | User of int64

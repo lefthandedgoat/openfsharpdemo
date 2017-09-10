@@ -42,5 +42,3 @@ let base_header brand =
       ]
     ]
   ]
-
-  

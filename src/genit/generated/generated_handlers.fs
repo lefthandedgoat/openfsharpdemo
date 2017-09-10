@@ -84,6 +84,21 @@ let create_checkout =
       POST >=> bindToForm checkoutForm (fun form -> createPOST form bundle_checkout)
     ]
 
+let add_to_cart =
+  POST >=> bindToForm addToCartForm (fun addToCartForm ->
+    getSession (fun session ->
+      match session with
+      | User(userID) ->
+        //add a new cart every time, obviously wrong, demoware
+        let cart = { CartID = 0L; UserFK = userID; Items = [] }
+        let cartId = insert_cart cart
+        let cartItem = { CartItemID = 0L; CartFK = cartId; ProductFK = int64 addToCartForm.ProductID }
+        insert_cartItem cartItem |> ignore
+        FOUND (sprintf "/cart/view/%i" cartId)
+      | _ -> UNAUTHORIZED "Not logged in"))
+
+//////API
+
 let api_register =
   POST >=> request (fun req ->
     let register = fromJson<Register> (System.Text.Encoding.UTF8.GetString(req.rawForm))

@@ -19,7 +19,7 @@ let path_login = "/login"
 let path_view_product : Int64Path = "/product/view/%i"
 let path_search_product = "/product/search"
 let path_view_cart : Int64Path = "/cart/view/%i"
-let path_add_to_cart = "/cart/add/"
+let path_add_to_cart = "/cart/add"
 let path_checkout = "/checkout"
 
 let path_api_register = "/api/register"
@@ -44,6 +44,7 @@ let generated_routes =
     path path_search_product >=> search_product
     pathScan path_view_cart view_cart
     path path_checkout >=> loggedOn path_login create_checkout
+    path path_add_to_cart >=> add_to_cart
 
     pathScan path_api_product api_product
     path path_api_search_product >=> api_search_product

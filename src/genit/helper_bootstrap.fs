@@ -54,6 +54,7 @@ let progress_bar type' percent inner = divAttr ["class", (sprintf "progress-bar 
 let tile color inner = divClass (sprintf "fd-tile detail clean tile-%s" color) inner
 let sidebar_item inner = spanAttr ["class","sidebar-item"] inner
 let form_horizontal inner = formAttr ["class","form-horizontal"] inner
+let form_horizontal' action inner = formAttr ["action", action; "class","form-horizontal"] inner
 let form_inline inner = formAttr ["class","form-inline"] inner
 let form_group inner = divClass "form-group" inner
 let input_group inner = divClass "input-group" inner
@@ -348,6 +349,22 @@ let common_static_form button decription formElements =
           div [
             form_horizontal [
               content formElements
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+
+let common_static_form' action button decription formElements =
+  container [
+    row [
+      form_wrapper [
+        form_title [ h3 decription ]
+        form_content [
+          div [
+            form_horizontal' action [
+              content (formElements @ [form_group [ sm12 [ button ] ] ])
             ]
           ]
         ]

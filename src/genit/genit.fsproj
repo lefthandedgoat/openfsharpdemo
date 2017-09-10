@@ -60,6 +60,7 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="generated/generated_types.fs" />
     <Compile Include="helper_general.fs" />
     <Compile Include="generator/dsl.fs" />
     <Compile Include="generator/mssql.fs" />
@@ -80,7 +81,6 @@
     <Compile Include="loadGeneratorView.fs" />
     <Compile Include="generated/generated_security.fs" />
     <Compile Include="generated/generated_html.fs" />
-    <Compile Include="generated/generated_types.fs" />
     <Compile Include="generated/generated_data_access.fs" />
     <Compile Include="generated/generated_forms.fs" />
     <Compile Include="generated/generated_fake_data.fs" />

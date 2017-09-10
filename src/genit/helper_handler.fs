@@ -12,6 +12,8 @@ open helper_general
 open helper_html
 open forms
 open Suave.RequestErrors
+open Suave.State.CookieStateStore
+open generated_types
 
 let withParam (key,value) path = sprintf "%s?%s=%s" path key value
 
@@ -43,6 +45,16 @@ let setAuthCookieAndRedirect id redirectTo =
   >=> statefulForSession
   >=> sessionStore (fun store -> store.set "user_id" id)
   >=> request (fun _ -> FOUND redirectTo)
+
+let getSession f =
+  statefulForSession
+  >=> context (fun x ->
+    match x |> HttpContext.state with
+    | None -> f NoSession
+    | Some state ->
+      match state.get "user_id" with
+      | Some user_id -> f (User user_id)
+      | _ -> f NoSession)
 
 (*
    NOTE

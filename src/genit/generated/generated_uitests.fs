@@ -92,7 +92,7 @@ let run () =
 
   context "Scenario"
 
-  "Register -> Search -> Add to Cart -> Checkout" &&& fun _ ->
+  "Register -> Search -> Add to Cart -> Checkout" &&&& fun _ ->
     let firstName, lastName, email = generateUniqueUser ()
     let product = fake_product()
 
@@ -105,4 +105,7 @@ let run () =
     click "Submit"
     click "tbody tr:first"
 
-    on "http://google.com"
+    click "Add to Cart"
+
+    on "http://localhost:8083/cart/view"
+    on "http://www.google.com"
