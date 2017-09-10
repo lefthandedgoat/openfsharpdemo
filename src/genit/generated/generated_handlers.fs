@@ -29,6 +29,9 @@ let mapErrors validation = validation |> List.map (fun (_,error) -> error)
 
 let home = GET >=> OK view_jumbo_home
 
+let thanks =
+  GET >=> OK view_thanks
+
 let register =
   choose
     [
@@ -76,13 +79,12 @@ let search_product =
 let view_cart id =
   GET >=> warbler (fun _ -> viewGET id bundle_cart)
 
-
-let create_checkout =
-  choose
-    [
-      GET >=> warbler (fun _ -> createGET bundle_checkout)
-      POST >=> bindToForm checkoutForm (fun form -> createPOST form bundle_checkout)
-    ]
+let checkout =
+  POST >=> bindToForm checkoutForm (fun form ->
+    let checkout = { CheckoutID = 0L; CartFK = int64 form.CartFK }
+    insert_checkout checkout |> ignore
+    delete_cartItems checkout.CartFK
+    FOUND "/thanks")
 
 let add_to_cart =
   POST >=> bindToForm addToCartForm (fun addToCartForm ->

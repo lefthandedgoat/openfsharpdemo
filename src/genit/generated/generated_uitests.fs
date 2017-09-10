@@ -92,20 +92,27 @@ let run () =
 
   context "Scenario"
 
-  "Register -> Search -> Add to Cart -> Checkout" &&&& fun _ ->
+  "Register -> Search -> Add to Cart -> Checkout" &&& fun _ ->
     let firstName, lastName, email = generateUniqueUser ()
     let product = fake_product()
 
     addProduct product |> ignore
     register firstName lastName email
 
+    //Search
     url "http://localhost:8083/product/search"
     "[name='Value']" << product.Name
-
     click "Submit"
+
+    //View first result
     click "tbody tr:first"
 
     click "Add to Cart"
 
-    on "http://localhost:8083/cart/view"
-    on "http://www.google.com"
+    //displayed "Product Name"
+
+    click "Checkout"
+
+    displayed "Thanks!"
+
+    //count ".cart-item" 0

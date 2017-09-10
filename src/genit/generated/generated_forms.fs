@@ -94,17 +94,10 @@ let convert_cartItemForm (cartItemForm : CartItemForm) : CartItem =
 
 type CheckoutForm =
   {
-    CheckoutID : string
     CartFK : string
   }
 
 let checkoutForm : Form<CheckoutForm> = Form ([],[])
-
-let convert_checkoutForm (checkoutForm : CheckoutForm) : Checkout =
-  {
-    CheckoutID = int64 checkoutForm.CheckoutID
-    CartFK = int64 checkoutForm.CartFK
-  }
 
 type AddToCartForm =
   {

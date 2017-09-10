@@ -25,6 +25,19 @@ let view_jumbo_home =
     ]
     scripts.common
 
+let view_thanks =
+  base_html
+    "Thanks"
+    (base_header brand)
+    [
+      divClass "container" [
+        divClass "jumbotron" [
+          h1 (sprintf "Thanks!")
+        ]
+      ]
+    ]
+    scripts.common
+
 let view_register =
   base_middle_html
     "Register"
@@ -337,73 +350,17 @@ let view_create_errored_cart errors (cartForm : CartForm) =
     ]
     scripts.common
 
-let view_generate_cart (cart : Cart) =
-  base_html
-    "Generate Cart"
-    (base_header brand)
-    [
-      common_form
-        "Generate Cart"
-        [
-          hiddenInput "CartID" cart.CartID
-          label_text "User FK" cart.UserFK
-        ]
-    ]
-    scripts.common
-
-let view_generate_errored_cart errors (cartForm : CartForm) =
-  base_html
-    "Generate Cart"
-    (base_header brand)
-    [
-      common_form
-        "Generate Cart"
-        [
-          hiddenInput "CartID" cartForm.CartID
-          errored_label_text "User FK" (string cartForm.RegisterFK) errors
-        ]
-    ]
-    scripts.common
-
 let view_view_cart (cart : Cart) =
-  let button = button_small_success_right (sprintf "/cart/edit/%i" cart.CartID) [ text "Edit" ]
+  let button = inputAttr [ "value","Checkout"; "type","submit"; "class","btn btn-success pull-right"; ]
   base_html
     "Cart"
     (base_header brand)
     [
-      common_static_form button
+      common_static_form' "/checkout" button
         "Cart"
         [
-
-          label_static "User FK" cart.UserFK
-        ]
-    ]
-    scripts.common
-
-let view_edit_cart (cart : Cart) =
-  base_html
-    "Edit Cart"
-    (base_header brand)
-    [
-      common_form
-        "Edit Cart"
-        [
-          hiddenInput "CartID" cart.CartID
-          label_text "User FK" cart.UserFK
-        ]
-    ]
-    scripts.common
-
-let view_edit_errored_cart errors (cartForm : CartForm) =
-  base_html
-    "Edit Cart"
-    (base_header brand)
-    [
-      common_form
-        "Edit Cart"
-        [
-          hiddenInput "CartID" cartForm.CartID
-          errored_label_text "User FK" (string cartForm.RegisterFK) errors
+          hiddenInput "CartFK" cart.CartID
+          label_static "Number of Items" cart.Items.Length
         ]
     ]
     scripts.common
@@ -598,20 +555,6 @@ let view_create_checkout =
     ]
     scripts.common
 
-let view_create_errored_checkout errors (checkoutForm : CheckoutForm) =
-  base_html
-    "Create Checkout"
-    (base_header brand)
-    [
-      common_form
-        "Create Checkout"
-        [
-          hiddenInput "CheckoutID" checkoutForm.CheckoutID
-          errored_label_text "Cart FK" (string checkoutForm.CartFK) errors
-        ]
-    ]
-    scripts.common
-
 let view_generate_checkout (checkout : Checkout) =
   base_html
     "Generate Checkout"
@@ -622,20 +565,6 @@ let view_generate_checkout (checkout : Checkout) =
         [
           hiddenInput "CheckoutID" checkout.CheckoutID
           label_text "Cart FK" checkout.CartFK
-        ]
-    ]
-    scripts.common
-
-let view_generate_errored_checkout errors (checkoutForm : CheckoutForm) =
-  base_html
-    "Generate Checkout"
-    (base_header brand)
-    [
-      common_form
-        "Generate Checkout"
-        [
-          hiddenInput "CheckoutID" checkoutForm.CheckoutID
-          errored_label_text "Cart FK" (string checkoutForm.CartFK) errors
         ]
     ]
     scripts.common
@@ -651,34 +580,6 @@ let view_view_checkout (checkout : Checkout) =
         [
 
           label_static "Cart FK" checkout.CartFK
-        ]
-    ]
-    scripts.common
-
-let view_edit_checkout (checkout : Checkout) =
-  base_html
-    "Edit Checkout"
-    (base_header brand)
-    [
-      common_form
-        "Edit Checkout"
-        [
-          hiddenInput "CheckoutID" checkout.CheckoutID
-          label_text "Cart FK" checkout.CartFK
-        ]
-    ]
-    scripts.common
-
-let view_edit_errored_checkout errors (checkoutForm : CheckoutForm) =
-  base_html
-    "Edit Checkout"
-    (base_header brand)
-    [
-      common_form
-        "Edit Checkout"
-        [
-          hiddenInput "CheckoutID" checkoutForm.CheckoutID
-          errored_label_text "Cart FK" (string checkoutForm.CartFK) errors
         ]
     ]
     scripts.common
