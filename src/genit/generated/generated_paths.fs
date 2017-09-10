@@ -39,7 +39,6 @@ let generated_routes =
   [
     path path_home >=> home
     path path_register >=> register
-    path path_api_register >=> api_register
     path path_login >=> login
     pathScan path_view_product view_product
     path path_search_product >=> search_product
@@ -48,6 +47,7 @@ let generated_routes =
     path path_add_to_cart >=> add_to_cart
     path path_thanks >=> thanks
 
+    path path_api_register >=> api_register
     pathScan path_api_product api_product
     path path_api_search_product >=> api_search_product
     path path_api_create_product >=> api_create_product
